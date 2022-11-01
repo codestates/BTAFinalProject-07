@@ -1,0 +1,24 @@
+{
+  "name": "Engineer Wallet",
+  "short_name": "Engineer Wallet",
+  "description":"Neer Protocol Wallet",
+  "manifest_version":3,
+  "version":"1.0.0",
+  "permissions":[
+    "storage"
+  ],
+  "icons":{
+    "128":"engineer.png" 
+  },
+  "action": {
+    "default_popup":"popup.html"
+  },
+  "background": {
+    "service_worker": "static/js/background.js",
+    "type": "module"
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  }
+}
