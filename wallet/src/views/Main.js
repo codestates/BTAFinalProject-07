@@ -1,10 +1,8 @@
-import { useNavigate } from 'react-router-dom';
-import engineer from '../images/engineer.png';
+import engineer from '../assets/engineer.png';
 import '../css/App.css';
 
-const Main = () => {
-    const navigate = useNavigate();
-    const goToPage = (route) => navigate(route);
+const Main = (props) => {
+    console.log(props.route);
 
     return (
         <>
@@ -14,8 +12,8 @@ const Main = () => {
             </div>
             <div style={{marginTop:"50px"}}>
                 <div style={{marginBottom:"10px", padding:"0px 10px", textAlign:"center"}}>
-                    <button className='Button_Main' onClick={() => goToPage('/create-password')}>계정 생성</button>
-                    <button className='Button_Main' onClick={() => goToPage('/create-recovery')}>계정 복구</button>
+                    <button className='Button_Main' onClick={() => props.setRoute('/create-password')}>계정 생성</button>
+                    <button className='Button_Main' onClick={() => console.log('/create-recovery')}>계정 복구</button>
                 </div>
             </div>
         </>

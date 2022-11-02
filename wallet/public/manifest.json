@@ -11,14 +11,9 @@
     "128":"engineer.png" 
   },
   "action": {
-    "default_popup":"popup.html"
+    "default_popup":"index.html"
   },
   "background": {
-    "service_worker": "static/js/background.js",
-    "type": "module"
-  },
-  "options_ui": {
-    "page": "options.html",
-    "open_in_tab": true
+    "service_worker": "background.js"
   }
 }

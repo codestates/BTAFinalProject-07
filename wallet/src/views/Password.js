@@ -1,7 +1,10 @@
-const Password = () => {
+import { useState } from "react";
+
+const Password = (props) => {
+    const [visivle, setVisible] = useState("none");
 
     return (
-        <div>Password</div>
+        <div style={{display:(props.route === '/create-password' ? "block" : "none")}}>Password</div>
     );
 }
 

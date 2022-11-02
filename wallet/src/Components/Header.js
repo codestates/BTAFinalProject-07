@@ -1,4 +1,4 @@
-import engineer from '../images/engineer.png';
+import engineer from '../assets/engineer.png';
 
 const Header = () => {
 
