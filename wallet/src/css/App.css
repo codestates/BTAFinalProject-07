@@ -9,6 +9,38 @@
   cursor:pointer;
   border-radius:10px; 
   margin-bottom: 20px;
-  background:#ffffff; 
+  background:#ffffff;
+  transition: all 0.3s;
   border:1px solid #EA973E; 
+}
+
+.Button_Back {
+  width:50px;
+  border:0px; 
+  font-size:20px;
+  cursor: pointer;
+  color:#EA973E; 
+  font-weight:bold;
+  background-color:white; 
+}
+
+.Title_div {
+  height:50px;
+  display:flex;
+  padding-top:5px;
+  border-bottom:1px solid rgb(194, 192, 192);
+}
+
+.Title {
+  margin: 0;
+  font-size: 25px;
+  color: #EA973E;
+  font-weight: 500;
+  padding-top: 10px;
+  padding-left: 55px;
+}
+
+.Input {
+  width: 300px;
+  height: 30px;
 }

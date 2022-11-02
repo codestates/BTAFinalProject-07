@@ -5,7 +5,7 @@ const Main = (props) => {
     console.log(props.route);
 
     return (
-        <>
+        <div style={{display:(props.route === '/' ? 'block' : 'none')}}>
             <div style={{textAlign:"center", marginTop:"10px"}}>
                 <img src={engineer} width="200px" />
                 <p style={{marginTop:"-35px", fontSize:"30px", fontWeight:"bold"}}>Welcome To <br />ENGINEER</p>
@@ -16,7 +16,7 @@ const Main = (props) => {
                     <button className='Button_Main' onClick={() => console.log('/create-recovery')}>계정 복구</button>
                 </div>
             </div>
-        </>
+        </div>
     );
 }
 
