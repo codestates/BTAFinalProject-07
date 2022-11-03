@@ -1,3 +1,4 @@
+import { OPEN_IN_WEB, STORAGE } from '../utils/Constants';
 import { useState } from "react";
 import '../css/App.css';
 
@@ -6,12 +7,22 @@ const Password = (props) => {
     const [chk, setChk] = useState("");
 
     const handleChk = () => {
-        if (pwd !== chk || pwd.length === 0 || chk.length === 0) {
-            alert("비밀번호가 일치하지 않습니다.");
-            return false;
+        // RETURN
+        if (!pwd || !chk || pwd !== chk) {
+            return;
         }
-        
+
+        // SET PWD
         props.setLoad(true);
+        if (OPEN_IN_WEB) {sessionStorage.setItem('hashedPassword', JSON.stringify(pwd));}
+        else {STORAGE?.set({['hashedPassword']:JSON.stringify(pwd)}, () => {return})}
+        setPwd(""); setChk("");
+
+        // GO TO SEED
+        setTimeout(() => {
+            props.setLoad(false);
+            props.setRoute('/create-mnemonic');
+        }, 1000)
     }
     
     const locationBack = () => {
@@ -30,17 +41,17 @@ const Password = (props) => {
                 <div style={{marginTop:"30px"}}>
                     <div>
                         <div style={{textAlign:"left", padding:"5px 15px"}}>새 비밀번호</div>
-                        <input type={"password"} className="Input" onChange={(e) => {setPwd(e.target.value);}}></input>
+                        <input value={pwd} type={"password"} className="Input" onChange={(e) => {setPwd(e.target.value);}}></input>
                     </div>
                 </div>
                 <div style={{marginTop:"20px"}}>
                     <div>
                         <div style={{textAlign:"left", padding:"5px 15px"}}>비밀번호 확인</div>
-                        <input type={"password"} className="Input" onChange={(e) => setChk(e.target.value)}></input>
+                        <input value={chk} type={"password"} className="Input" onChange={(e) => setChk(e.target.value)} style={{borderColor:(pwd !== chk ? "red" : "")}}></input>
                     </div>
                 </div>
                 <div style={{textAlign:"center", marginTop:"60px"}}>
-                    <button className="Button_Main" onClick={handleChk}>생성</button>
+                    <button className="Button_Filled" onClick={handleChk} style={{backgroundColor:(!pwd || !chk || pwd !== chk)?"#D3D3D3":"#EA973E"}}>생성</button>
                 </div>
             </div>
         </div>

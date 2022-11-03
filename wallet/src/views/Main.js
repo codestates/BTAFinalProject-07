@@ -2,8 +2,6 @@ import engineer from '../assets/engineer.png';
 import '../css/App.css';
 
 const Main = (props) => {
-    console.log(props.route);
-
     return (
         <div style={{display:(props.route === '/' ? 'block' : 'none')}}>
             <div style={{textAlign:"center", marginTop:"10px"}}>
