@@ -1,11 +1,14 @@
 import { OPEN_IN_WEB, STORAGE } from '../utils/Constants';
+import { useNavigate } from 'react-router-dom';
 import { useState } from "react";
 import '../css/App.css';
 
 const Password = (props) => {
+    const navigate = useNavigate();
+    const movePage = (route) => navigate(route);
+    
     const [pwd, setPwd] = useState("");
     const [chk, setChk] = useState("");
-
     const handleChk = () => {
         // RETURN
         if (!pwd || !chk || pwd !== chk) {
@@ -21,17 +24,17 @@ const Password = (props) => {
         // GO TO SEED
         setTimeout(() => {
             props.setLoad(false);
-            props.setRoute('/create-mnemonic');
+            movePage("/create-mnemonic");
         }, 1000)
     }
     
     const locationBack = () => {
-        props.setRoute('/');
+        movePage("/");
         return;
     }
 
     return (
-        <div style={{display:(props.route === '/create-password' ? "block" : "none"), padding:"0 5px"}}>
+        <div style={{padding:"0 5px"}}>
             <div className="Title_div">
                 <button className="Button_Back" onClick={locationBack}>◀</button>
                 <p className="Title">비밀번호 설정</p>

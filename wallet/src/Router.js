@@ -1,26 +1,35 @@
-// import { Route, BrowserRouter, Routes } from 'react-router-dom';
-// import { createMemoryHistory } from 'history';
+import { Route, Routes } from 'react-router-dom';
+import { createMemoryHistory } from 'history';
+import { useState } from 'react';
 
-// import Main from './views/Main';
-// import Password from './views/Password';
-// import Recovery from './views/Recovery';
-// import Header from './Components/Header';
-// import Footer from './Components/Footer';
+import { BrowserRouter } from 'react-router-dom';
+// import { MemoryRouter as BrowserRouter} from 'react-router-dom';
 
-// const Router = () => {
+import Main from './views/Main';
+import Password from './views/Password';
+import Recovery from './views/Recovery';
+import Mnemonic from './views/Mnemonic';
+import Header from './Components/Header';
+import Footer from './Components/Footer';
+import Loading from './Components/Loading';
 
-//     const history = createMemoryHistory();
-//     return (
-//         <BrowserRouter history={history}>
-//             <Header />
-//             <Routes>
-//                 <Route path='/' element={<Main />}/>
-//                 <Route path='/create-password' element={<Password />}/>
-//                 <Route path='/create-recovery' element={<Recovery />}/>
-//             </Routes>
-//             <Footer />
-//         </BrowserRouter>
-//     );
-// }
+const Router = () => {
+    const [load, setLoad] = useState(false);
+    const history = createMemoryHistory();
 
-// export default Router;
+    return (
+        <BrowserRouter history={history}>
+            <Header />
+            <Routes>
+                <Route path='/' element={<Main />}/>
+                <Route path='/create-password' element={<Password setLoad={setLoad}/>} />
+                <Route path='/create-recovery' element={<Recovery setLoad={setLoad}/>} />
+                <Route path='/create-mnemonic' element={<Mnemonic setLoad={setLoad}/>} />
+            </Routes>
+            <Footer />
+            <Loading load={load} setLoad={setLoad}/>
+        </BrowserRouter>
+    );
+}
+
+export default Router;
