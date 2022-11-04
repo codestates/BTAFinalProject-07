@@ -1,6 +1,6 @@
-import { OPEN_IN_WEB, STORAGE } from '../utils/Constants';
 import { useNavigate } from 'react-router-dom';
 import { useState } from "react";
+import CryptoJS from 'crypto-js';
 import '../css/App.css';
 
 const Password = (props) => {
@@ -17,8 +17,7 @@ const Password = (props) => {
 
         // SET PWD
         props.setLoad(true);
-        if (OPEN_IN_WEB) {sessionStorage.setItem('hashedPassword', JSON.stringify(pwd));}
-        else {STORAGE?.set({['hashedPassword']:JSON.stringify(pwd)}, () => {return})}
+        localStorage.setItem("pwd", CryptoJS.SHA256(pwd).toString());
         setPwd(""); setChk("");
 
         // GO TO SEED

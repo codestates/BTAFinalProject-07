@@ -20,3 +20,10 @@ export const encryptMessage = (message, secret) => {
   
     return ciphertext;
 };
+
+export const decryptMessage = (cipherText, secret) => {
+    let bytes = crypto.AES.decrypt(cipherText, secret);
+    let decryptedText = JSON.parse(bytes.toString(crypto.enc.Utf8));
+  
+    return decryptedText;
+  };

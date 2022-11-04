@@ -1,11 +1,11 @@
 import { useState } from 'react';
-// import Router from './Router';
+import Router from './Router';
 import './css/App.css';
 
 function App() {
   return (
-    <div>HI
-      {/* <Router /> */}
+    <div>
+      <Router />
     </div>
   );
 }
