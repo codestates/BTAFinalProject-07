@@ -1,15 +1,17 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { decryptMessage } from '../utils/util';
 import { connect, keyStores } from 'near-api-js';
+import { decryptMessage } from '../utils/util';
+import Loading from '../Components/Loading';
 import { useState } from "react";
 import '../css/App.css'
 
 const CheckMnemonic = (props) => {
+    const [inputMnemonic, setInputMnemonic] = useState("");
+    const [chkValue, setChkValue] = useState(false);
+    const movePage = (route) => navigate(route);
+    const [load, setLoad] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
-    const movePage = (route) => navigate(route);
-    const [chkValue, setChkValue] = useState(false);
-    const [inputMnemonic, setInputMnemonic] = useState("");
 
     const locationBack = () => {
         movePage('/create-password');
@@ -28,7 +30,7 @@ const CheckMnemonic = (props) => {
         }
 
         // Get User Info
-        props.setLoad(true);
+        setLoad(true);
         const userInfo = [];
         const existedUser = JSON.parse(localStorage.getItem('userInfo'));
         const accountNum = existedUser ? existedUser.length + 1 : 1;
@@ -67,7 +69,7 @@ const CheckMnemonic = (props) => {
         
         
         setTimeout(() => {
-            props.setLoad(false);
+            setLoad(false);
             alert("계정생성 완료.");
             navigate('/dashboard');
         }, 1000)
@@ -86,6 +88,7 @@ const CheckMnemonic = (props) => {
                 <button style={{marginTop:"30px"}} className="Button_Filled" onClick={() => compareMnemonic()}>복구 구문 확인</button>
             </div>
         </div>
+        {<Loading load={load}/>}
     </>
 }
 

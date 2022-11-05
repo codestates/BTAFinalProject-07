@@ -72,9 +72,23 @@ const Dashboard = () => {
             {/* Modal Area End */}
 
             <p style={copyText}>복사되었습니다.</p>
-            <img src={engineer} alt='logo' width="200px" />
+            <img src={engineer} alt='logo' width="150px" />
             <div>
-
+                <p style={{fontWeight:'bold', fontSize:'20px', margin:0}}><span style={{color:"#EA973E"}}>{coin}</span> NEAR</p>
+                <div style={{paddingTop:'20px', display:'flex', textAlign:'center', alignItems:'middle'}}>
+                    <div>
+                        <button className='Button_dash' />
+                        <p>전송</p>
+                    </div>
+                    <div>
+                        <button className='Button_dash' />
+                        <p>전송</p>
+                    </div>
+                    <div>
+                        <button className='Button_dash' />
+                        <p>전송</p>
+                    </div>
+                </div>
             </div>
         </div>
     </>

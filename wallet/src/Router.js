@@ -11,7 +11,6 @@ import Recovery from './views/Recovery';
 import Mnemonic from './views/Mnemonic';
 import Header from './Components/Header';
 import Footer from './Components/Footer';
-import Loading from './Components/Loading';
 import CheckMnemonic from './views/CheckMnemonic';
 import Dashboard from './views/Dashboard';
 
@@ -31,7 +30,6 @@ const Router = () => {
                 <Route path='/check-mnemonic' element={<CheckMnemonic setLoad={setLoad}/>} />
             </Routes>
             <Footer />
-            <Loading load={load} setLoad={setLoad}/>
         </BrowserRouter>
     );
 }

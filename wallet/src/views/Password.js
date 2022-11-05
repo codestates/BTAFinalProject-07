@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import Loading from '../Components/Loading';
 import { useState } from "react";
 import CryptoJS from 'crypto-js';
 import '../css/App.css';
@@ -7,7 +8,8 @@ const Password = (props) => {
     const navigate = useNavigate();
     const [pwd, setPwd] = useState("");
     const [chk, setChk] = useState("");
-    
+    const [load, setLoad] = useState(false);
+
     const handleChk = () => {
         // RETURN
         if (!pwd || !chk || pwd !== chk) {
@@ -15,13 +17,13 @@ const Password = (props) => {
         }
 
         // SET PWD
-        props.setLoad(true);
+        setLoad(true);
         localStorage.setItem('pwd', CryptoJS.SHA256(pwd).toString());
         setPwd(""); setChk("");
 
         // GO TO SEED
         setTimeout(() => {
-            props.setLoad(false);
+            setLoad(false);
             navigate("/create-mnemonic");
         }, 1000)
     }
@@ -31,7 +33,7 @@ const Password = (props) => {
         return;
     }
 
-    return (
+    return (<>
         <div style={{padding:"0 5px"}}>
             <div className="Title_div">
                 <button className="Button_Back" onClick={locationBack}>◀</button>
@@ -56,7 +58,8 @@ const Password = (props) => {
                 </div>
             </div>
         </div>
-    );
+        {<Loading load={load}/>}
+    </>);
 }
 
 export default Password;
