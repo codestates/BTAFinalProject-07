@@ -3,7 +3,7 @@ import { KeyPair } from "near-api-js";
 import crypto from 'crypto-js';
 
 export const generateSeed = () => {
-    const {seedPhrase, publicKey, secretKey} = generateSeedPhrase();
+    const {seedPhrase, secretKey} = generateSeedPhrase();
     const recoveryKeyPair = KeyPair.fromString(secretKey);
     return {
         seedPhrase: seedPhrase,

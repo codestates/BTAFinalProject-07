@@ -13,6 +13,7 @@ import Header from './Components/Header';
 import Footer from './Components/Footer';
 import Loading from './Components/Loading';
 import CheckMnemonic from './views/CheckMnemonic';
+import Dashboard from './views/Dashboard';
 
 const Router = () => {
     const [load, setLoad] = useState(false);
@@ -23,6 +24,7 @@ const Router = () => {
             <Header />
             <Routes>
                 <Route path='/' element={<Main />}/>
+                <Route path='/dashboard' element={<Dashboard />}/>
                 <Route path='/create-password' element={<Password setLoad={setLoad}/>} />
                 <Route path='/create-recovery' element={<Recovery setLoad={setLoad}/>} />
                 <Route path='/create-mnemonic' element={<Mnemonic setLoad={setLoad}/>} />

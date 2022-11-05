@@ -1,5 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { decryptMessage } from '../utils/util';
+import { connect, keyStores } from 'near-api-js';
 import { useState } from "react";
 import '../css/App.css'
 
@@ -15,9 +16,9 @@ const CheckMnemonic = (props) => {
         return;
     }
 
-    const compareMnemonic = () => {
-        const password = localStorage.getItem('pwd');
-        const decryptMnemonic = decryptMessage(location.state.data, password);
+    const compareMnemonic = async () => {
+        const password = location.state.hashPwd;
+        const decryptMnemonic = decryptMessage(location.state.hashMnemonic, password);
         
         // Compare Value
         if (decryptMnemonic !== inputMnemonic) {
@@ -26,24 +27,49 @@ const CheckMnemonic = (props) => {
             return;
         }
 
-        // Go TO Home
+        // Get User Info
         props.setLoad(true);
-        const userInfo = {
-            name: "Account_1",
-            accounts : {
-                [location.state.address] : {
-                    data: location.state.data,
-                    address: location.state.address,
-                    secretKey: location.state.secretKey
-                }
+        const userInfo = [];
+        const existedUser = JSON.parse(localStorage.getItem('userInfo'));
+        const accountNum = existedUser ? existedUser.length + 1 : 1;
+        const accountID = "account" + accountNum;
+
+        const newUser = {
+            name: accountID,
+            account : {
+                address: location.state.address,
+                hashPwd: location.state.hashPwd,
+                hashSecret: location.state.hashPrivate,
+                hashMnemonic: location.state.hashMnemonic
             }
         }
 
-        localStorage.setItem("wallet", true);
-        localStorage.setItem("userInfo", userInfo);
+        // Set User Info
+        if (existedUser) { userInfo.push(...existedUser); userInfo.push(newUser);
+        } else { userInfo.push(newUser)}
+        localStorage.setItem('wallet', true);
+        localStorage.setItem('current', JSON.stringify(newUser));
+        localStorage.setItem('userInfo', JSON.stringify(userInfo));
+
+        // Create Account
+        const near = await connect({
+            networkId: "testnet",
+            keyStore: new keyStores.InMemoryKeyStore(),
+            nodeUrl: "https://rpc.testnet.near.org",
+            walletUrl: "https://wallet.testnet.near.org",
+            helperUrl: "https://helper.testnet.near.org",
+            explorerUrl: "https://explorer.testnet.near.org",
+        })
+
+        const testnetAccount = accountID + ".testnet";
+        const accountInfo = await near.account(testnetAccount);
+        await near.createAccount(testnetAccount, location.state.address);
+        
         
         setTimeout(() => {
             props.setLoad(false);
+            alert("계정생성 완료.");
+            navigate('/dashboard');
         }, 1000)
     }
 

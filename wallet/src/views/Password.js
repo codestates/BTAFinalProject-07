@@ -5,10 +5,9 @@ import '../css/App.css';
 
 const Password = (props) => {
     const navigate = useNavigate();
-    const movePage = (route) => navigate(route);
-    
     const [pwd, setPwd] = useState("");
     const [chk, setChk] = useState("");
+    
     const handleChk = () => {
         // RETURN
         if (!pwd || !chk || pwd !== chk) {
@@ -17,18 +16,18 @@ const Password = (props) => {
 
         // SET PWD
         props.setLoad(true);
-        localStorage.setItem("pwd", CryptoJS.SHA256(pwd).toString());
+        localStorage.setItem('pwd', CryptoJS.SHA256(pwd).toString());
         setPwd(""); setChk("");
 
         // GO TO SEED
         setTimeout(() => {
             props.setLoad(false);
-            movePage("/create-mnemonic");
+            navigate("/create-mnemonic");
         }, 1000)
     }
     
     const locationBack = () => {
-        movePage("/");
+        navigate("/");
         return;
     }
 

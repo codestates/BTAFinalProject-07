@@ -5,7 +5,6 @@ import '../css/App.css';
 
 const Mnemonic = (props) => {
     const navigate = useNavigate();
-    const movePage = (route) => navigate(route);
     const [mnemonic, setMnemonic] = useState("");
     const [copyCheck, setCopyCheck] = useState(false);
     const [encryptedData, setEncryptedData] = useState(null);
@@ -16,15 +15,16 @@ const Mnemonic = (props) => {
 
     const setMnemonicPhrase = async () => {
         const {seedPhrase, address, secret} = generateSeed();
+
         setMnemonic(seedPhrase);
-        const password = localStorage.getItem("pwd");
-        const cipherMnemonic = encryptMessage(seedPhrase, password);
-        const cipherPrivate = encryptMessage(secret, password);
-        setEncryptedData({data:cipherMnemonic, address:address, secretKey:cipherPrivate});
+        const hashPwd = localStorage.getItem('pwd');
+        const hashPrivate = encryptMessage(secret, hashPwd);
+        const hashMnemonic = encryptMessage(seedPhrase, hashPwd);
+        setEncryptedData({hashMnemonic:hashMnemonic, address:address, hashPrivate:hashPrivate, hashPwd:hashPwd});
     };
 
     const locationBack = () => {
-        movePage('/create-password');
+        navigate('/create-password');
         return;
     }
 
@@ -35,6 +35,7 @@ const Mnemonic = (props) => {
     }
 
     const goToCheckMnemonic = () => {
+        localStorage.removeItem('pwd')
         navigate("/check-mnemonic", {state: {...encryptedData}});
     }
 
