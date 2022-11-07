@@ -1,4 +1,4 @@
-import {BiPaperPlane, BiReceipt, BiUserCircle, BiCheck, BiImport, BiPlus} from 'react-icons/bi';
+import {BiPaperPlane, BiReceipt, BiUserCircle, BiCheck, BiImport, BiPlus, BiCopy} from 'react-icons/bi';
 import engineer from '../assets/engineer_title.png';
 import { connect, keyStores } from 'near-api-js';
 import { useNavigate } from 'react-router-dom';
@@ -73,8 +73,9 @@ const Dashboard = () => {
     }
 
     const clickAccount = async (data) => {
+        if (name === data.name) return;
+
         setLoad(true);
-        
         near = await connect({
             networkId: "testnet",
             keyStore: new keyStores.InMemoryKeyStore(),
@@ -104,7 +105,9 @@ const Dashboard = () => {
                 <div className='Hambuger' onClick={() => clickMenu()}>···</div>
                 <p style={{margin:0, fontSize:"20px", fontWeight:"bold"}}>{String(name).substring(0, 1).toUpperCase() + String(name).substring(1)}</p>
                 <div style={{display:'flex', flexDirection:'row', justifyContent:'center'}}>
-                    <p className='CopyAddress' onClick={() => clipboardCopy()}>{(address) ? address.substring(0, 5) + '...' + address.substring(40) : address}</p>
+                    <p className='CopyAddress' onClick={() => clipboardCopy()}>
+                        {(address) ? address.substring(0, 5) + '...' + address.substring(40) : address} <BiCopy />
+                    </p>
                 </div>
             </div>
 
