@@ -19,7 +19,7 @@ const AccountInfo = (props) => {
     const [showInfo, setShowInfo] = useState(false);
     const [deMnemonic, setDeMnemonic] = useState('');
     const current = JSON.parse(localStorage.getItem('current'));
-    const name = String(current.name).substring(0, 1).toUpperCase() + String(current.name).substring(1);
+    const name = (current) ? String(current.name).substring(0, 1).toUpperCase() + String(current.name).substring(1) : '';
 
     const buttonCss = {
         width:'250px', 
@@ -58,6 +58,13 @@ const AccountInfo = (props) => {
 
         localStorage.setItem('userInfo', JSON.stringify(userInfo));
         localStorage.setItem('current', JSON.stringify(changeAccount));
+
+        if (userInfo.length === 0) {
+            localStorage.removeItem('userInfo');
+            localStorage.removeItem('current');
+            localStorage.removeItem('wallet');
+            localStorage.removeItem('pwd');
+        }
 
         setLoad(false);
         setAlert(true);

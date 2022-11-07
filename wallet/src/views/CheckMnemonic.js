@@ -67,11 +67,8 @@ const CheckMnemonic = (props) => {
         const accountInfo = await near.account(testnetAccount);
         await near.createAccount(testnetAccount, location.state.address);
         
-        
-        setTimeout(() => {
-            setLoad(false);
-            setAlert(true);
-        }, 1000)
+        setLoad(false);
+        setAlert(true);
     }
 
     return <>

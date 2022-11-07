@@ -112,10 +112,8 @@ const Dashboard = () => {
         await near.account(testnetID);
         await near.createAccount(testnetID, address);
 
-        setTimeout(() => {
-            setLoad(false);
-            setAlert(true);
-        }, 1000)
+        setLoad(false);
+        setAlert(true);
 
         return;
     }
