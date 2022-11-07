@@ -1,14 +1,16 @@
-import {BiPaperPlane, BiReceipt, BiUserCircle, BiCheck, BiImport, BiPlus, BiCopy} from 'react-icons/bi';
+import {BiPaperPlane, BiReceipt, BiUserCircle, BiCheck, BiImport, BiPlus, BiCopy, BiKey} from 'react-icons/bi';
 import engineer from '../assets/engineer_title.png';
 import { connect, keyStores } from 'near-api-js';
 import { useNavigate } from 'react-router-dom';
 import Loading from '../Components/Loading';
 import { useEffect, useState } from 'react';
 import '../css/App.css';
+import AccountInfo from '../Components/AccountInfo';
 
 const Dashboard = () => {
     const [copyCheck, setCopyCheck] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
+    const [infoOpen, setInfoOpen] = useState(false);
     const [userInfo, setUserInfo] = useState(null);
     const [address, setAddress] = useState("");
     const [load, setLoad] = useState(false);
@@ -98,7 +100,7 @@ const Dashboard = () => {
         setLoad(false);
         return;
     }
-    
+
 
     return <>
         <div style={{textAlign:"center", marginTop:"5px"}}>
@@ -112,8 +114,8 @@ const Dashboard = () => {
                 </div>
             </div>
 
-            {/* Modal Area Start */}
-            <div className='Modal' style={{visibility:(menuOpen)?'':'hidden', width:(menuOpen)?'200px':0, height:(menuOpen)?'300px':0}}>
+            {/* Menu Modal Area Start */}
+            <div className='Modal' style={{visibility:(menuOpen)?'':'hidden', width:(menuOpen)?'200px':0, height:(menuOpen)?'320px':0}}>
                 <div className='Modiv' style={{borderBottom:'1px solid #D3D3D3'}}>
                     <div className='Modiv' style={{width:'80px', padding:'5px 0px'}}>내 계정</div>
                 </div>
@@ -131,6 +133,10 @@ const Dashboard = () => {
                 </div>
                 <div>
                     <div className='Bottom-Item'>
+                        <BiKey size={30} color='#373737'/>
+                        <div style={{paddingLeft:'5px', color:'#373737'}} onClick={() => setInfoOpen(true)}>계정 정보</div>
+                    </div>
+                    <div className='Bottom-Item'>
                         <BiPlus size={30} color='#373737'/>
                         <div style={{paddingLeft:'5px', color:'#373737'}} onClick={() => clickNavigator('password')}>계정 생성</div>
                     </div>
@@ -140,7 +146,7 @@ const Dashboard = () => {
                     </div>
                 </div>
             </div>
-            {/* Modal Area End */}
+            {/* Menu Modal Area End */}
 
             <p style={{transition:'all 0.3s', margin:0, color:(copyCheck?'#EA973E':'white')}}>복사되었습니다.</p>
             <img src={engineer} alt='logo' width="150px" />
@@ -157,6 +163,7 @@ const Dashboard = () => {
             </div>
         </div>
         {<Loading load={load}/>}
+        {<AccountInfo open={infoOpen} setOpen={setInfoOpen}/>}
     </>
 }
 
