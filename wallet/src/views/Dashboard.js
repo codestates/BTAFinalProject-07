@@ -67,8 +67,9 @@ const Dashboard = () => {
         else {setMenuOpen(true)}
     };
 
-    const createAccount = () => {
-        navigate('/create-password');
+    const clickNavigator = (route) => {
+        if (route === 'password') navigate('/create-password');
+        if (route === 'import') navigate('/import-account');
         return;
     }
 
@@ -131,11 +132,11 @@ const Dashboard = () => {
                 <div>
                     <div className='Bottom-Item'>
                         <BiPlus size={30} color='#373737'/>
-                        <div style={{paddingLeft:'5px', color:'#373737'}} onClick={() => createAccount()}>계정 생성</div>
+                        <div style={{paddingLeft:'5px', color:'#373737'}} onClick={() => clickNavigator('password')}>계정 생성</div>
                     </div>
                     <div className='Bottom-Item'>
                         <BiImport size={30} color='#373737'/>
-                        <div style={{paddingLeft:'5px', color:'#373737'}}>계정 가져오기</div>
+                        <div style={{paddingLeft:'5px', color:'#373737'}} onClick={() => clickNavigator('import')}>계정 가져오기</div>
                     </div>
                 </div>
             </div>

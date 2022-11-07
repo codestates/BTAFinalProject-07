@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import '../css/App.css';
 
-const Mnemonic = (props) => {
+const Mnemonic = () => {
     const navigate = useNavigate();
     const [mnemonic, setMnemonic] = useState("");
     const [copyCheck, setCopyCheck] = useState(false);
@@ -20,7 +20,7 @@ const Mnemonic = (props) => {
         const hashPwd = localStorage.getItem('pwd');
         const hashPrivate = encryptMessage(secret, hashPwd);
         const hashMnemonic = encryptMessage(seedPhrase, hashPwd);
-        setEncryptedData({hashMnemonic:hashMnemonic, address:address, hashPrivate:hashPrivate, hashPwd:hashPwd});
+        setEncryptedData({hashMnemonic:hashMnemonic, address:address, hashPrivate:hashPrivate});
     };
 
     const locationBack = () => {
@@ -35,7 +35,6 @@ const Mnemonic = (props) => {
     }
 
     const goToCheckMnemonic = () => {
-        localStorage.removeItem('pwd')
         navigate("/check-mnemonic", {state: {...encryptedData}});
     }
 

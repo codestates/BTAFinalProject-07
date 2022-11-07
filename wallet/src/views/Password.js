@@ -4,7 +4,7 @@ import { useState } from "react";
 import CryptoJS from 'crypto-js';
 import '../css/App.css';
 
-const Password = (props) => {
+const Password = () => {
     const navigate = useNavigate();
     const [pwd, setPwd] = useState("");
     const [chk, setChk] = useState("");

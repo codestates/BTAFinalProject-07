@@ -18,7 +18,7 @@ const CheckMnemonic = (props) => {
     }
 
     const compareMnemonic = async () => {
-        const password = location.state.hashPwd;
+        const password = localStorage.getItem('pwd');
         const decryptMnemonic = decryptMessage(location.state.hashMnemonic, password);
         
         // Compare Value
@@ -39,7 +39,6 @@ const CheckMnemonic = (props) => {
             name: accountID,
             account : {
                 address: location.state.address,
-                hashPwd: location.state.hashPwd,
                 hashSecret: location.state.hashPrivate,
                 hashMnemonic: location.state.hashMnemonic
             }
@@ -82,7 +81,7 @@ const CheckMnemonic = (props) => {
             </div>
             <div style={{padding:"0 15px", textAlign:"center"}}>
                 <p style={{paddingBottom:"20px"}}>발급받은 복구 구문을 입력해주세요.</p>
-                <input value={inputMnemonic} onChange={(e) => {setChkValue(false); setInputMnemonic(e.target.value)}} type={"text"} style={{width:"300px", height:"50px", border:"1px solid #D3D3D3", borderRadius:"10px", padding:"10px", fontSize:"15px"}} />
+                <input value={inputMnemonic} onChange={(e) => {setChkValue(false); setInputMnemonic(e.target.value)}} type={"text"} className='Input_Mnemonic' />
                 <p style={{transition:"all 0.5s", paddingLeft:"10px", margin:"0px", color:(chkValue ? "red" : "white")}}>복구 구문이 일치하지 않습니다.</p>
                 <button style={{marginTop:"30px"}} className="Button_Filled" onClick={() => compareMnemonic()}>복구 구문 확인</button>
             </div>

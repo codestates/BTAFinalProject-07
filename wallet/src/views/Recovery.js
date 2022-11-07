@@ -1,8 +1,8 @@
-const Recover = (props) => {
+const Recovery = () => {
 
-    return (
-        <div style={{display:(props.route === '/create-account' ? "block" : "none"), padding:"0 5px"}}>Recover</div>
-    );
+    return <>
+        <div>Recovery</div>
+    </>
 }
 
-export default Recover;
+export default Recovery;

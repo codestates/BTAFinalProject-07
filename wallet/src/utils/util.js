@@ -1,4 +1,4 @@
-import { generateSeedPhrase } from "near-seed-phrase";
+import { generateSeedPhrase, parseSeedPhrase } from "near-seed-phrase";
 import { KeyPair } from "near-api-js";
 import crypto from 'crypto-js';
 
@@ -10,6 +10,18 @@ export const generateSeed = () => {
         address: recoveryKeyPair.getPublicKey().toString(),
         secret: recoveryKeyPair.secretKey
     };
+}
+
+export const parseSeed = (mnemonic) => {
+    const {seedPhrase, secretKey} = parseSeedPhrase(mnemonic);
+    const keyPair = KeyPair.fromString(secretKey);
+    const address = keyPair.publicKey.toString();
+
+    return {
+        mnemonic: seedPhrase,
+        secretKey: secretKey,
+        address: address
+    }
 }
 
 export const encryptMessage = (message, secret) => {

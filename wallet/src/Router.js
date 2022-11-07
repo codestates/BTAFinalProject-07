@@ -11,11 +11,11 @@ import Recovery from './views/Recovery';
 import Mnemonic from './views/Mnemonic';
 import Header from './Components/Header';
 import Footer from './Components/Footer';
-import CheckMnemonic from './views/CheckMnemonic';
 import Dashboard from './views/Dashboard';
+import CheckMnemonic from './views/CheckMnemonic';
+import ImportAccount from './views/ImportAccount';
 
 const Router = () => {
-    const [load, setLoad] = useState(false);
     const history = createMemoryHistory();
 
     return (
@@ -24,10 +24,11 @@ const Router = () => {
             <Routes>
                 <Route path='/' element={<Main />}/>
                 <Route path='/dashboard' element={<Dashboard />}/>
-                <Route path='/create-password' element={<Password setLoad={setLoad}/>} />
-                <Route path='/create-recovery' element={<Recovery setLoad={setLoad}/>} />
-                <Route path='/create-mnemonic' element={<Mnemonic setLoad={setLoad}/>} />
-                <Route path='/check-mnemonic' element={<CheckMnemonic setLoad={setLoad}/>} />
+                <Route path='/create-password' element={<Password />} />
+                <Route path='/create-recovery' element={<Recovery />} />
+                <Route path='/create-mnemonic' element={<Mnemonic />} />
+                <Route path='/import-account' element={<ImportAccount />} />
+                <Route path='/check-mnemonic' element={<CheckMnemonic />} />
             </Routes>
             <Footer />
         </BrowserRouter>
