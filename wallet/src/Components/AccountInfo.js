@@ -79,7 +79,7 @@ const AccountInfo = (props) => {
     }
 
     return <>
-        <div className='Account-wrap' style={{display:(props.open ? 'block' : 'none')}} />
+        <div className='Account-wrap' style={{opacity:'70%', display:(props.open ? 'block' : 'none')}} />
         <div className='Account-Content' style={{display: (props.open ? 'block' : 'none')}}>
             <div className='Account-Header'>
                 <p>{name}</p>
@@ -120,7 +120,7 @@ const AccountInfo = (props) => {
 
         {/* Confirm Area Start ========== ========== ========== ========== ==========*/}
         <div style={{display:(confirm ? 'block' : 'none')}}>
-            <div className='Confirm-Alert-wrap'/>
+            <div className='Confirm-Alert-wrap' style={{opacity:'70%'}}/>
             <div className='Confirm-Alert-content'>
                 <FiAlertCircle size={60} color='#EA973E' style={{paddingTop:'10px'}}/>
                 <p className='Message'>계정을 삭제하시겠습니까?</p>
@@ -134,7 +134,7 @@ const AccountInfo = (props) => {
 
         {/* Alert Area Start ========== ========== ========== ========== ==========*/}
         <div style={{display:(alert ? 'block' : 'none')}}>
-            <div className='Confirm-Alert-wrap'/>
+            <div className='Confirm-Alert-wrap' style={{opacity:'70%'}}/>
             <div className='Confirm-Alert-content'>
                 <FiAlertCircle size={60} color='#EA973E' style={{paddingTop:'10px'}}/>
                 <p className='Message'>계정 삭제 완료.</p>

@@ -1,5 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { connect, keyStores } from 'near-api-js';
+import { FiAlertCircle } from 'react-icons/fi';
 import { decryptMessage } from '../utils/util';
 import Loading from '../Components/Loading';
 import { useState } from "react";
@@ -8,6 +9,7 @@ import '../css/App.css'
 const CheckMnemonic = (props) => {
     const [inputMnemonic, setInputMnemonic] = useState("");
     const [chkValue, setChkValue] = useState(false);
+    const [alert, setAlert] = useState(false);
     const [load, setLoad] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
@@ -68,8 +70,7 @@ const CheckMnemonic = (props) => {
         
         setTimeout(() => {
             setLoad(false);
-            alert("계정생성 완료.");
-            navigate('/dashboard');
+            setAlert(true);
         }, 1000)
     }
 
@@ -87,6 +88,19 @@ const CheckMnemonic = (props) => {
             </div>
         </div>
         {<Loading load={load}/>}
+
+        {/* Alert Area Start ========== ========== ========== ========== ==========*/}
+        <div style={{display:(alert ? 'block' : 'none')}}>
+            <div className='Confirm-Alert-wrap' style={{opacity:'70%'}}/>
+            <div className='Confirm-Alert-content'>
+                <FiAlertCircle size={60} color='#EA973E' style={{paddingTop:'10px'}}/>
+                <p className='Message'>계정 생성 완료.</p>
+                <div style={{paddingTop:'20px'}}>
+                    <button className='Create' onClick={() => navigate('/dashboard')}>확인</button>
+                </div>
+            </div>
+        </div>
+        {/* Alert Area End ========== ========== ========== ========== ==========*/}
     </>
 }
 

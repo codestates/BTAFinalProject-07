@@ -213,7 +213,7 @@ const Dashboard = () => {
 
         {/* Confirm Area Start ========== ========== ========== ========== ==========*/}
         <div style={{display:(confirm ? 'block' : 'none')}}>
-            <div className='Confirm-Alert-wrap'/>
+            <div className='Confirm-Alert-wrap' style={{opacity:'70%'}}/>
             <div className='Confirm-Alert-content'>
                 <FiAlertCircle size={60} color='#EA973E' style={{paddingTop:'10px'}}/>
                 <p className='Message'>계정을 생성하시겠습니까?</p>
@@ -227,12 +227,12 @@ const Dashboard = () => {
 
         {/* Alert Area Start ========== ========== ========== ========== ==========*/}
         <div style={{display:(alert ? 'block' : 'none')}}>
-            <div className='Confirm-Alert-wrap'/>
+            <div className='Confirm-Alert-wrap' style={{opacity:'70%'}}/>
             <div className='Confirm-Alert-content'>
                 <FiAlertCircle size={60} color='#EA973E' style={{paddingTop:'10px'}}/>
                 <p className='Message'>계정 생성 완료.</p>
                 <div style={{paddingTop:'20px'}}>
-                    <button className='Create' onClick={() => clickAccount(JSON.parse(localStorage.getItem('current')))}>확인</button>
+                    <button className='Create' onClick={() => window.location.reload()}>확인</button>
                 </div>
             </div>
         </div>
