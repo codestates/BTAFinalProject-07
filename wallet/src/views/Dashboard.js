@@ -1,6 +1,7 @@
 import { connect, keyStores } from 'near-api-js';
 import engineer from '../assets/engineer_title.png';
 import { useEffect, useState } from 'react';
+import {BiPaperPlane, BiReceipt} from 'react-icons/bi'
 import '../css/App.css';
 
 const Dashboard = () => {
@@ -73,21 +74,15 @@ const Dashboard = () => {
 
             <p style={copyText}>복사되었습니다.</p>
             <img src={engineer} alt='logo' width="150px" />
-            <div>
-                <p style={{fontWeight:'bold', fontSize:'20px', margin:0}}><span style={{color:"#EA973E"}}>{coin}</span> NEAR</p>
-                <div style={{paddingTop:'20px', display:'flex', textAlign:'center', alignItems:'middle'}}>
-                    <div>
-                        <button className='Button_dash' />
-                        <p>전송</p>
-                    </div>
-                    <div>
-                        <button className='Button_dash' />
-                        <p>전송</p>
-                    </div>
-                    <div>
-                        <button className='Button_dash' />
-                        <p>전송</p>
-                    </div>
+            <p style={{fontWeight:'bold', fontSize:'20px', margin:0}}><span style={{color:"#EA973E"}}>{coin}</span> NEAR</p>
+            <div style={{paddingTop:'50px', display:'flex', flexDirection:'row', justifyContent:'center'}}>
+                <div className='Button_Area'>
+                    <button><BiPaperPlane size={30}/></button>
+                    <p>전송</p>
+                </div>
+                <div className='Button_Area'>
+                    <button><BiReceipt size={30}/></button>
+                    <p>내역</p>
                 </div>
             </div>
         </div>

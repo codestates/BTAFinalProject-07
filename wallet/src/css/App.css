@@ -111,3 +111,29 @@
   z-index: 10;
   right: 0;
 }
+
+.Button_Area {
+  width: 100px;
+}
+
+.Button_Area button {
+  background-color: #D3D3D3;
+  transition: all 0.2s;
+  border-radius: 10px;
+  margin: 0px 20px;
+  cursor: pointer;
+  height: 60px;
+  width: 60px;
+  border: 0px;
+}
+
+.Button_Area button:hover {
+  background-color: #EA973E;
+}
+
+.Button_Area p {
+  font-weight: bold;
+  padding-top: 5px;
+  font-size: 13px;
+  margin: 0;
+}
