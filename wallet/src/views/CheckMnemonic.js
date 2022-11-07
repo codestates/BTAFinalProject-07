@@ -8,13 +8,12 @@ import '../css/App.css'
 const CheckMnemonic = (props) => {
     const [inputMnemonic, setInputMnemonic] = useState("");
     const [chkValue, setChkValue] = useState(false);
-    const movePage = (route) => navigate(route);
     const [load, setLoad] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
 
     const locationBack = () => {
-        movePage('/create-password');
+        navigate('/create-password');
         return;
     }
 
