@@ -82,7 +82,7 @@ const Dashboard = () => {
         const {seedPhrase, address, secret} = generateSeed();
         const hashPrivate = encryptMessage(secret, password);
         const hashMnemonic = encryptMessage(seedPhrase, password);
-        const accountNum = existedUser.length + 1;
+        const accountNum = Number(String(existedUser[existedUser.length - 1].name).substring(7)) + 1;
         const accountID = "account" + accountNum;
         const testnetID = accountID + ".testnet";
 

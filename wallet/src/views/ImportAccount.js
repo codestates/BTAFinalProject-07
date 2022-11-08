@@ -1,12 +1,14 @@
 import { useNavigate } from "react-router-dom";
 import Loading from '../Components/Loading';
-import { parseSeed } from '../utils/util';
+import { encryptMessage, parseSeed } from '../utils/util';
 import { useState } from "react";
 import '../css/App.css';
+import { FiActivity } from "react-icons/fi";
 
 const ImportAccount = () => {
     const [inputMnemonic, setInputMnemonic] = useState("");
     const [check, setCheck] = useState(false);
+    const [alert, setAlert] = useState(false);
     const [load, setLoad] = useState(false);
     const navigator = useNavigate();
 
@@ -25,7 +27,33 @@ const ImportAccount = () => {
         }
 
         setLoad(true);
+        const password = localStorage.getItem('pwd');
+        const existed = JSON.parse(localStorage.getItem('userInfo'));
         const {mnemonic, secretKey, address} = parseSeed(inputMnemonic);
+
+        const hashPrivate = encryptMessage(secretKey, password);
+        const hashMnemonic = encryptMessage(mnemonic, password);
+        const number = Number(String(existed[existed.length - 1].name).substring(7)) + 1;
+        const acctId = "account" + number;
+
+        const userInfo = [];
+        const newUser = {
+            name: acctId,
+            account : {
+                address: address,
+                hashSecret: hashPrivate,
+                hashMnemonic: hashMnemonic
+            }
+        }
+
+        userInfo.push(...existed); userInfo.push(newUser);
+        localStorage.setItem('current', JSON.stringify(newUser));
+        localStorage.setItem('userInfo', JSON.stringify(userInfo));
+
+        setTimeout(() => {
+            setLoad(false);
+            setAlert(true);
+        }, 500);
 
     }
 
@@ -42,6 +70,20 @@ const ImportAccount = () => {
                 <button className="Button_Filled" style={{margin:'30px 0px'}} onClick={() => fnImport()}>가져오기</button>
             </div>
         </div>
+
+        {/* Alert Area Start ========== ========== ========== ========== ==========*/}
+        <div style={{display:(alert ? 'block' : 'none')}}>
+            <div className='Confirm-Alert-wrap' style={{opacity:'70%'}}/>
+            <div className='Confirm-Alert-content'>
+                <FiActivity size={60} color='#EA973E' style={{paddingTop:'10px'}}/>
+                <p className='Message'>계정 불러오기 성공.</p>
+                <div style={{paddingTop:'20px'}}>
+                    <button className='Create' onClick={() => {setAlert(false); navigator('/dashboard')}}>확인</button>
+                </div>
+            </div>
+        </div>
+        {/* Alert Area End ========== ========== ========== ========== ==========*/}
+
         {<Loading load={load}/>}
     </>
     );

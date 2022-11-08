@@ -52,9 +52,8 @@ const AccountInfo = (props) => {
 
         const userInfo = JSON.parse(localStorage.getItem('userInfo'));
         const current = JSON.parse(localStorage.getItem('current'));
-        const index = String(current.name)[7];
         const changeAccount = userInfo[0];
-        userInfo.splice(index - 1, 1);
+        userInfo.splice(userInfo.length - 1, 1);
 
         localStorage.setItem('userInfo', JSON.stringify(userInfo));
         localStorage.setItem('current', JSON.stringify(changeAccount));
