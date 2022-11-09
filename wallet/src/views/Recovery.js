@@ -34,9 +34,10 @@ const Recovery = () => {
         const { secretKey, seedPhrase } = parseSeedPhrase(inputMnemonic);
         const keyPair = KeyPair.fromString(secretKey);
         const address = keyPair.publicKey.toString();
+        const secret = keyPair.secretKey;
 
         const password = CryptoJS.SHA256(pwd).toString()
-        const encryptPrivated = encryptMessage(secretKey, password);
+        const encryptPrivated = encryptMessage(secret, password);
         const encryptMnemonic = encryptMessage(seedPhrase, password);
 
         const newUser = {
@@ -49,9 +50,9 @@ const Recovery = () => {
         }
 
         localStorage.setItem('wallet', true);
+        localStorage.setItem('pwd', password);
         localStorage.setItem('current', JSON.stringify(newUser));
         localStorage.setItem('userInfo', JSON.stringify([newUser]));
-        localStorage.setItem('pwd', CryptoJS.SHA256(pwd).toString());
 
         const near = await connect({
             networkId: "testnet",

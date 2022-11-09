@@ -15,12 +15,11 @@ export const generateSeed = () => {
 export const parseSeed = (mnemonic) => {
     const {seedPhrase, secretKey} = parseSeedPhrase(mnemonic);
     const keyPair = KeyPair.fromString(secretKey);
-    const address = keyPair.publicKey.toString();
 
     return {
         mnemonic: seedPhrase,
-        secretKey: secretKey,
-        address: address
+        secretKey: keyPair.secretKey,
+        address: keyPair.publicKey.toString()
     }
 }
 
