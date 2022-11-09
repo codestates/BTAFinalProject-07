@@ -32,13 +32,8 @@ const CheckMnemonic = (props) => {
 
         // Get User Info
         setLoad(true);
-        const userInfo = [];
-        const existedUser = JSON.parse(localStorage.getItem('userInfo'));
-        const accountNum = existedUser ? existedUser.length + 1 : 1;
-        const accountID = "account" + accountNum;
-
         const newUser = {
-            name: accountID,
+            name: 'account1',
             account : {
                 address: location.state.address,
                 hashSecret: location.state.hashPrivate,
@@ -47,11 +42,9 @@ const CheckMnemonic = (props) => {
         }
 
         // Set User Info
-        if (existedUser) { userInfo.push(...existedUser); userInfo.push(newUser);
-        } else { userInfo.push(newUser)}
         localStorage.setItem('wallet', true);
         localStorage.setItem('current', JSON.stringify(newUser));
-        localStorage.setItem('userInfo', JSON.stringify(userInfo));
+        localStorage.setItem('userInfo', JSON.stringify([newUser]));
 
         // Create Account
         const near = await connect({
