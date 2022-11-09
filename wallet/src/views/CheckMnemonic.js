@@ -56,7 +56,7 @@ const CheckMnemonic = (props) => {
             explorerUrl: "https://explorer.testnet.near.org",
         })
 
-        const testnetAccount = accountID + ".testnet";
+        const testnetAccount = "account1.testnet";
         const accountInfo = await near.account(testnetAccount);
         await near.createAccount(testnetAccount, location.state.address);
         
