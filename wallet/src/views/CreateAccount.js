@@ -59,7 +59,7 @@ const CreateAccount = () => {
         localStorage.setItem('wallet', true);
         localStorage.setItem('current', JSON.stringify(newUser));
         localStorage.setItem('userInfo', JSON.stringify(userInfo));
-        if (location.type !== 'recovery') {
+        if (location.type === 'recovery') {
             setMessage('계좌 복구 완료.');
             setLoad(false);
             setAlert(true);
