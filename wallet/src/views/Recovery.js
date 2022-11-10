@@ -2,7 +2,7 @@ import { connect, keyStores, KeyPair } from 'near-api-js';
 import { parseSeedPhrase } from 'near-seed-phrase';
 import { FiAlertCircle } from 'react-icons/fi';
 import { useNavigate } from "react-router-dom";
-import { encryptMessage } from '../utils/util';
+import { encryptMessage, parseSeed } from '../utils/util';
 import Loading from '../Components/Loading';
 import CryptoJS from 'crypto-js';
 import { useState } from "react";
@@ -11,7 +11,6 @@ import '../css/App.css';
 const Recovery = () => {
     const [inputMnemonic, setInputMnemonic] = useState('');
     const [chkMnemonic, setChkMnemonic] = useState(false);
-    const [alert, setAlert] = useState(false);
     const [load, setLoad] = useState(false);
     const [pwd, setPwd] = useState("");
     const [chk, setChk] = useState("");
@@ -31,44 +30,19 @@ const Recovery = () => {
         }
 
         setLoad(true);
-        const { secretKey, seedPhrase } = parseSeedPhrase(inputMnemonic);
-        const keyPair = KeyPair.fromString(secretKey);
-        const address = keyPair.publicKey.toString();
-        const secret = keyPair.secretKey;
-
         const password = CryptoJS.SHA256(pwd).toString()
-        const encryptPrivated = encryptMessage(secret, password);
-        const encryptMnemonic = encryptMessage(seedPhrase, password);
-
-        const newUser = {
-            name: 'account1',
-            account : {
-                address: address,
-                hashSecret: encryptPrivated,
-                hashMnemonic: encryptMnemonic
-            }
+        const {mnemonic, secretKey, address} = parseSeed(inputMnemonic);
+        const hashPrivate = encryptMessage(secretKey, password);
+        const hashMnemonic = encryptMessage(mnemonic, password);
+        const data = {
+            address:address, 
+            hashPrivate:hashPrivate,
+            hashMnemonic:hashMnemonic, 
         }
 
-        localStorage.setItem('wallet', true);
-        localStorage.setItem('pwd', password);
-        localStorage.setItem('current', JSON.stringify(newUser));
-        localStorage.setItem('userInfo', JSON.stringify([newUser]));
-
-        const near = await connect({
-            networkId: "testnet",
-            keyStore: new keyStores.InMemoryKeyStore(),
-            nodeUrl: "https://rpc.testnet.near.org",
-            walletUrl: "https://wallet.testnet.near.org",
-            helperUrl: "https://helper.testnet.near.org",
-            explorerUrl: "https://explorer.testnet.near.org",
-        })
-
-        const testnetAccount = "account1.testnet";
-        const accountInfo = await near.account(testnetAccount);
-        await near.createAccount(testnetAccount, address);
-
         setLoad(false);
-        setAlert(true);
+        localStorage.setItem('pwd', password);
+        navigate("/create-account", {state: {...data}, type:'recovery'});
     }
 
     return <>
@@ -106,19 +80,6 @@ const Recovery = () => {
             </div>
         </div>
         {<Loading load={load}/>}
-
-        {/* Alert Area Start ========== ========== ========== ========== ==========*/}
-        <div style={{display:(alert ? 'block' : 'none')}}>
-            <div className='Confirm-Alert-wrap' style={{opacity:'70%'}}/>
-            <div className='Confirm-Alert-content'>
-                <FiAlertCircle size={60} color='#EA973E' style={{paddingTop:'10px'}}/>
-                <p className='Message'>계정 복구 완료</p>
-                <div style={{paddingTop:'20px'}}>
-                    <button className='Create' onClick={() => {setAlert(false); navigate('/dashboard');}}>확인</button>
-                </div>
-            </div>
-        </div>
-        {/* Alert Area End ========== ========== ========== ========== ==========*/}
     </>
 }
 

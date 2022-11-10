@@ -4,17 +4,19 @@ import { useNavigate } from "react-router-dom";
 import Loading from '../Components/Loading';
 import { useState } from "react";
 import '../css/App.css';
+import Alert from '../Components/Alert';
 
 const ImportAccount = () => {
-    const [inputMnemonic, setInputMnemonic] = useState("");
-    const [message, setMessage] = useState("");
+    const [inputMnemonic, setInputMnemonic] = useState('');
+    const [message, setMessage] = useState('');
     const [check, setCheck] = useState(false);
     const [alert, setAlert] = useState(false);
+    const [close, setClose] = useState(false);
     const [load, setLoad] = useState(false);
-    const navigator = useNavigate();
+    const navigate = useNavigate();
 
     const locationBack = () => {
-        navigator('/dashboard');
+        navigate('/dashboard');
         return;
     }
 
@@ -37,8 +39,9 @@ const ImportAccount = () => {
         })
 
         if (!validate) {
-            setMessage('이미 존재하는 계정입니다.');
+            setMessage('이미 존재하는 계좌입니다.');
             setInputMnemonic('');
+            setClose(true);
             setAlert(true);
             return false;
         }
@@ -46,40 +49,17 @@ const ImportAccount = () => {
         
         setLoad(true);
         const password = localStorage.getItem('pwd');
-        const existed = JSON.parse(localStorage.getItem('userInfo'));
         const {mnemonic, secretKey, address} = parseSeed(inputMnemonic);
-
         const hashPrivate = encryptMessage(secretKey, password);
         const hashMnemonic = encryptMessage(mnemonic, password);
-        const number = Number(String(existed[existed.length - 1].name).substring(7)) + 1;
-        const acctId = "account" + number;
-
-        const userInfo = [];
-        const newUser = {
-            name: acctId,
-            account : {
-                address: address,
-                hashSecret: hashPrivate,
-                hashMnemonic: hashMnemonic
-            }
+        const data = {
+            address:address, 
+            hashPrivate:hashPrivate,
+            hashMnemonic:hashMnemonic, 
         }
 
-        userInfo.push(...existed); userInfo.push(newUser);
-        localStorage.setItem('current', JSON.stringify(newUser));
-        localStorage.setItem('userInfo', JSON.stringify(userInfo));
-
-        setMessage("계정 복구 성공.")
         setLoad(false);
-        setAlert(true);
-    }
-
-    const clickOK = () => {
-        setAlert(false);
-        if (!inputMnemonic) {
-            return false;
-        }
-
-        navigator('/dashboard')
+        navigate("/create-account", {state: {...data}, type:'recovery'});
     }
 
     return (<>
@@ -89,27 +69,15 @@ const ImportAccount = () => {
                 <p className="Title">계정 가져오기</p>
             </div>
             <div style={{padding:"0 15px", textAlign:"center"}}>
-                <p style={{paddingBottom:"20px"}}>발급받았던 니모닉 구문을 입력해주세요.</p>
+                <p style={{paddingBottom:"20px"}}>발급받았던 복구 구문을 입력해주세요.</p>
                 <input value={inputMnemonic} type={'text'} className='Input_Mnemonic' onChange={(e) => {setCheck(false); setInputMnemonic(e.target.value)}}/>
-                <p style={{transition:'all 0.3s', color:(check ? '#EA973E' : 'white'), margin:0}}>유효하지 않은 니모닉 구문입니다.</p>
-                <button className="Button_Filled" style={{margin:'30px 0px'}} onClick={() => fnImport()}>가져오기</button>
+                <p style={{transition:'all 0.3s', color:(check ? '#EA973E' : 'white'), margin:0}}>유효하지 않은 복구 구문입니다.</p>
+                <button className="Button_Filled" style={{margin:'30px 0px'}} onClick={() => fnImport()}>확인</button>
             </div>
         </div>
-
-        {/* Alert Area Start ========== ========== ========== ========== ==========*/}
-        <div style={{display:(alert ? 'block' : 'none')}}>
-            <div className='Confirm-Alert-wrap' style={{opacity:'70%'}}/>
-            <div className='Confirm-Alert-content'>
-                <FiAlertCircle size={60} color='#EA973E' style={{paddingTop:'10px'}}/>
-                <p className='Message'>{message}</p>
-                <div style={{paddingTop:'20px'}}>
-                    <button className='Create' onClick={() => clickOK()}>확인</button>
-                </div>
-            </div>
-        </div>
-        {/* Alert Area End ========== ========== ========== ========== ==========*/}
 
         {<Loading load={load}/>}
+        {<Alert alert={alert} setAlert={setAlert} message={message} go={'/dashboard'} close={close} />}
     </>
     );
 }

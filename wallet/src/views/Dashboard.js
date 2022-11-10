@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { FiAlertCircle } from 'react-icons/fi';
 import Loading from '../Components/Loading';
 import { useEffect, useState } from 'react';
+import Alert from '../Components/Alert';
 import '../css/App.css';
 
 const Dashboard = () => {
@@ -14,20 +15,27 @@ const Dashboard = () => {
     const [menuOpen, setMenuOpen] = useState(false);
     const [infoOpen, setInfoOpen] = useState(false);
     const [userInfo, setUserInfo] = useState(null);
-    const [confirm, setConfirm] = useState(false);
-    const [address, setAddress] = useState("");
+    const [address, setAddress] = useState('');
     const [load, setLoad] = useState(false);
-    const [alert, setAlert] = useState("");
-    const [name, setName] = useState("");
+    const [name, setName] = useState('');
     const [coin, setCoin] = useState(0);
+    const [now, setNow] = useState(0);
     const navigate = useNavigate();
 
     let near;
     useEffect(() => {
         (async () => {
             const current = JSON.parse(localStorage.getItem('current'));
+            const info = JSON.parse(localStorage.getItem('userInfo'));
             setAddress(current.account.address.split(':')[1]);
             setName(current.name);
+            setUserInfo(info);
+
+            info.forEach((item, idx) => {
+                if (String(item.name) === String(current.name)) {
+                    setNow(idx + 1);
+                }
+            })
 
             near = await connect({
                 networkId: "testnet",
@@ -43,9 +51,6 @@ const Dashboard = () => {
             const calcurate = balance.available / 10 ** 24;
             const available = Math.floor(calcurate * 100000) / 100000;
             setCoin(available);
-
-            const info = JSON.parse(localStorage.getItem('userInfo'));
-            setUserInfo(info);
         })();
 
         window.addEventListener('click', (e) => {
@@ -73,52 +78,20 @@ const Dashboard = () => {
     };
 
     const createAccount = async () => {
-        setLoad(true);
-        setConfirm(false);
-        const userInfo = [];
         const password = localStorage.getItem('pwd');
-        const existedUser = JSON.parse(localStorage.getItem('userInfo'));
-        
         const {seedPhrase, address, secret} = generateSeed();
         const hashPrivate = encryptMessage(secret, password);
         const hashMnemonic = encryptMessage(seedPhrase, password);
-        const accountNum = Number(String(existedUser[existedUser.length - 1].name).substring(7)) + 1;
-        const accountID = "account" + accountNum;
-        const testnetID = accountID + ".testnet";
-
-        const newUser = {
-            name: accountID,
-            account : {
-                address: address,
-                hashSecret: hashPrivate,
-                hashMnemonic: hashMnemonic
-            }
+        const data = {
+            address:address, 
+            hashPrivate:hashPrivate,
+            hashMnemonic:hashMnemonic, 
         }
 
-        userInfo.push(...existedUser); userInfo.push(newUser);
-        localStorage.setItem('current', JSON.stringify(newUser));
-        localStorage.setItem('userInfo', JSON.stringify(userInfo));
-
-        near = await connect({
-            networkId: "testnet",
-            keyStore: new keyStores.InMemoryKeyStore(),
-            nodeUrl: "https://rpc.testnet.near.org",
-            walletUrl: "https://wallet.testnet.near.org",
-            helperUrl: "https://helper.testnet.near.org",
-            explorerUrl: "https://explorer.testnet.near.org",
-        })
-
-        
-        await near.account(testnetID);
-        await near.createAccount(testnetID, address);
-
-        setLoad(false);
-        setAlert(true);
-
-        return;
+        navigate("/create-account", {state: {...data}});
     }
 
-    const clickAccount = async (data) => {
+    const clickAccount = async (data, index) => {
         if (name === data.name) {
             return;
         }
@@ -142,7 +115,7 @@ const Dashboard = () => {
         setAddress(data.account.address.split(':')[1]);
         setName(data.name);
         setCoin(available);
-        setAlert(false);
+        setNow(index + 1);
         setLoad(false);
         return;
     }
@@ -152,7 +125,7 @@ const Dashboard = () => {
         <div style={{textAlign:"center", marginTop:"5px"}}>
             <div style={{borderBottom:"1px solid #D3D3D3", height:"50px"}}>
                 <div className='Hambuger' onClick={() => clickMenu()}>···</div>
-                <p style={{margin:0, fontSize:"20px", fontWeight:"bold"}}>{String(name).substring(0, 1).toUpperCase() + String(name).substring(1)}</p>
+                <p style={{margin:0, fontSize:"20px", fontWeight:"bold"}}>{'Account' + String(now)}</p>
                 <div style={{display:'flex', flexDirection:'row', justifyContent:'center'}}>
                     <p className='CopyAddress' onClick={() => clipboardCopy()}>
                         {(address) ? address.substring(0, 5) + '...' + address.substring(40) : address} <BiCopy />
@@ -168,10 +141,10 @@ const Dashboard = () => {
                 <div className='List-wrap'>  
                     {!userInfo ? null : userInfo.map((item, idx) => {
                         return (
-                            <div key={idx} className='List-Item' onClick={() => clickAccount(item)}>
-                                {(item.name == name) ? <BiCheck size={30} color='#1FD655'/> : <BiUserCircle size={30} color='#373737'/>}
+                            <div key={idx} className='List-Item' onClick={() => clickAccount(item, idx)}>
+                                {(item.name === name) ? <BiCheck size={30} color='#1FD655'/> : <BiUserCircle size={30} color='#373737'/>}
                                 <div style={{paddingLeft:'10px'}}>
-                                    {String(item.name).substring(0, 1).toUpperCase() + String(item.name).substring(1)}
+                                    {'Account' + (idx+1) + ' (' + (item.name.length > 6 ? String(item.name).substring(0, 6) + '...' : item.name) + ')'}
                                 </div>
                             </div>
                         )
@@ -182,7 +155,7 @@ const Dashboard = () => {
                         <BiKey size={30} color='#373737'/>
                         <div style={{paddingLeft:'5px', color:'#373737'}}>계정 정보</div>
                     </div>
-                    <div className='Bottom-Item' onClick={() => setConfirm(true)}>
+                    <div className='Bottom-Item' onClick={() => createAccount()}>
                         <BiPlus size={30} color='#373737'/>
                         <div style={{paddingLeft:'5px', color:'#373737'}}>계정 생성</div>
                     </div>
@@ -208,33 +181,6 @@ const Dashboard = () => {
                 </div>
             </div>
         </div>
-
-        {/* Confirm Area Start ========== ========== ========== ========== ==========*/}
-        <div style={{display:(confirm ? 'block' : 'none')}}>
-            <div className='Confirm-Alert-wrap' style={{opacity:'70%'}}/>
-            <div className='Confirm-Alert-content'>
-                <FiAlertCircle size={60} color='#EA973E' style={{paddingTop:'10px'}}/>
-                <p className='Message'>계정을 생성하시겠습니까?</p>
-                <div style={{paddingTop:'20px'}}>
-                    <button className='Create' onClick={() => createAccount()}>생성</button>
-                    <button className='Cancle' onClick={() => setConfirm(false)}>취소</button>
-                </div>
-            </div>
-        </div>
-        {/* Confirm Area End ========== ========== ========== ========== ==========*/}
-
-        {/* Alert Area Start ========== ========== ========== ========== ==========*/}
-        <div style={{display:(alert ? 'block' : 'none')}}>
-            <div className='Confirm-Alert-wrap' style={{opacity:'70%'}}/>
-            <div className='Confirm-Alert-content'>
-                <FiAlertCircle size={60} color='#EA973E' style={{paddingTop:'10px'}}/>
-                <p className='Message'>계정 생성 완료.</p>
-                <div style={{paddingTop:'20px'}}>
-                    <button className='Create' onClick={() => window.location.reload()}>확인</button>
-                </div>
-            </div>
-        </div>
-        {/* Alert Area End ========== ========== ========== ========== ==========*/}
 
         {<Loading load={load}/>}
         {<AccountInfo open={infoOpen} setOpen={setInfoOpen}/>}

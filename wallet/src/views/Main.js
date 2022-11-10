@@ -10,7 +10,7 @@ const Main = () => {
     useEffect(() => {
         if (wallet) {
             navigate('/dashboard');
-        }
+        } else localStorage.removeItem('pwd');
     }, [wallet, navigate])
 
     return (

@@ -1,16 +1,11 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { connect, keyStores } from 'near-api-js';
-import { FiAlertCircle } from 'react-icons/fi';
 import { decryptMessage } from '../utils/util';
-import Loading from '../Components/Loading';
 import { useState } from "react";
 import '../css/App.css'
 
-const CheckMnemonic = (props) => {
+const CheckMnemonic = () => {
     const [inputMnemonic, setInputMnemonic] = useState("");
     const [chkValue, setChkValue] = useState(false);
-    const [alert, setAlert] = useState(false);
-    const [load, setLoad] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -30,38 +25,7 @@ const CheckMnemonic = (props) => {
             return;
         }
 
-        // Get User Info
-        setLoad(true);
-        const newUser = {
-            name: 'account1',
-            account : {
-                address: location.state.address,
-                hashSecret: location.state.hashPrivate,
-                hashMnemonic: location.state.hashMnemonic
-            }
-        }
-
-        // Set User Info
-        localStorage.setItem('wallet', true);
-        localStorage.setItem('current', JSON.stringify(newUser));
-        localStorage.setItem('userInfo', JSON.stringify([newUser]));
-
-        // Create Account
-        const near = await connect({
-            networkId: "testnet",
-            keyStore: new keyStores.InMemoryKeyStore(),
-            nodeUrl: "https://rpc.testnet.near.org",
-            walletUrl: "https://wallet.testnet.near.org",
-            helperUrl: "https://helper.testnet.near.org",
-            explorerUrl: "https://explorer.testnet.near.org",
-        })
-
-        const testnetAccount = "account1.testnet";
-        const accountInfo = await near.account(testnetAccount);
-        await near.createAccount(testnetAccount, location.state.address);
-        
-        setLoad(false);
-        setAlert(true);
+        navigate('/create-account', {state: {...location.state}});
     }
 
     return <>
@@ -77,20 +41,7 @@ const CheckMnemonic = (props) => {
                 <button style={{marginTop:"30px"}} className="Button_Filled" onClick={() => compareMnemonic()}>복구 구문 확인</button>
             </div>
         </div>
-        {<Loading load={load}/>}
-
-        {/* Alert Area Start ========== ========== ========== ========== ==========*/}
-        <div style={{display:(alert ? 'block' : 'none')}}>
-            <div className='Confirm-Alert-wrap' style={{opacity:'70%'}}/>
-            <div className='Confirm-Alert-content'>
-                <FiAlertCircle size={60} color='#EA973E' style={{paddingTop:'10px'}}/>
-                <p className='Message'>계정 생성 완료.</p>
-                <div style={{paddingTop:'20px'}}>
-                    <button className='Create' onClick={() => navigate('/dashboard')}>확인</button>
-                </div>
-            </div>
-        </div>
-        {/* Alert Area End ========== ========== ========== ========== ==========*/}
+        
     </>
 }
 

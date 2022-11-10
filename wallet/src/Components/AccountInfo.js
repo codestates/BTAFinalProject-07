@@ -6,6 +6,7 @@ import { useState } from "react";
 import CryptoJS from 'crypto-js';
 import Loading from './Loading';
 import '../css/App.css';
+import Alert from './Alert';
 
 
 const AccountInfo = (props) => {
@@ -13,13 +14,13 @@ const AccountInfo = (props) => {
     const [load, setLoad] = useState(false);
     const [check, setCheck] = useState(false);
     const [alert, setAlert] = useState(false);
+    const [message, setMessage] = useState('');
     const [password, setPassword] = useState('');
     const [deSecret, setDeSecret] = useState('');
     const [confirm, setConfirm] = useState(false);
     const [showInfo, setShowInfo] = useState(false);
     const [deMnemonic, setDeMnemonic] = useState('');
     const current = JSON.parse(localStorage.getItem('current'));
-    const name = (current) ? String(current.name).substring(0, 1).toUpperCase() + String(current.name).substring(1) : '';
 
     const buttonCss = {
         width:'250px', 
@@ -65,6 +66,7 @@ const AccountInfo = (props) => {
             localStorage.removeItem('pwd');
         }
 
+        setMessage('계좌 삭제 완료.');
         setLoad(false);
         setAlert(true);
     }
@@ -88,13 +90,13 @@ const AccountInfo = (props) => {
         <div className='Account-wrap' style={{opacity:'70%', display:(props.open ? 'block' : 'none')}} />
         <div className='Account-Content' style={{display: (props.open ? 'block' : 'none')}}>
             <div className='Account-Header'>
-                <p>{name}</p>
+                <p>{current ? current.name : ''}</p>
                 <p style={{transition:'all 0.2s', fontSize:'15px', color:(copy ? '#EA973E' : 'white')}}>복사 완료!</p>
                 <div className='Exit' onClick={() => modalClose()}><IoMdClose size={20}/></div>
             </div>
             <div style={{padding:'5px', textAlign:'center', display:(showInfo ? 'none' : 'block')}}>
                 <div>
-                    <p style={{margin:0}}>계정 정보 확인을 위해 <br />비밀번호를 입력해주세요.</p>
+                    <p style={{margin:0}}>계좌 정보 확인을 위해 <br />비밀번호를 입력해주세요.</p>
                     <input value={password} type='password' className='Input' style={{width:'200px', marginTop:'30px'}} onChange={(e) => setPassword(e.target.value)}/>
                     <p style={{margin:0, fontSize:'13px', color:(check ? '#EA973E' : 'white'), transition:'all, 0.3s'}}>비밀번호가 일치하지 않습니다.</p>
                     <button className='Button_Filled' style={buttonCss} onClick={() => checkPassword()}>확인</button>
@@ -129,7 +131,7 @@ const AccountInfo = (props) => {
             <div className='Confirm-Alert-wrap' style={{opacity:'70%'}}/>
             <div className='Confirm-Alert-content'>
                 <FiAlertCircle size={60} color='#EA973E' style={{paddingTop:'10px'}}/>
-                <p className='Message'>계정을 삭제하시겠습니까?</p>
+                <p className='Message'>계좌를 삭제하시겠습니까?</p>
                 <div style={{paddingTop:'20px'}}>
                     <button className='Create' onClick={() => deleteAccount()}>삭제</button>
                     <button className='Cancle' onClick={() => setConfirm(false)}>취소</button>
@@ -137,19 +139,7 @@ const AccountInfo = (props) => {
             </div>
         </div>
         {/* Confirm Area End ========== ========== ========== ========== ==========*/}
-
-        {/* Alert Area Start ========== ========== ========== ========== ==========*/}
-        <div style={{display:(alert ? 'block' : 'none')}}>
-            <div className='Confirm-Alert-wrap' style={{opacity:'70%'}}/>
-            <div className='Confirm-Alert-content'>
-                <FiAlertCircle size={60} color='#EA973E' style={{paddingTop:'10px'}}/>
-                <p className='Message'>계정 삭제 완료.</p>
-                <div style={{paddingTop:'20px'}}>
-                    <button className='Create' onClick={() => window.location.reload()}>확인</button>
-                </div>
-            </div>
-        </div>
-        {/* Alert Area End ========== ========== ========== ========== ==========*/}
+        {<Alert alert={alert} message={message} go={'/dashboard'}/>}
     </>
 }
 
