@@ -1,17 +1,14 @@
 import { useRoutes } from 'react-router-dom';
 import NotFoundPage from '@/pages/NotFoundPage';
 import Home from '@/pages/Home';
+import Layout from '@/components/Layout';
 
 const Router = () => {
   return useRoutes([
     {
       path: '/',
-      children: [
-        {
-          path: '/',
-          element: <Home />,
-        },
-      ],
+      element: <Layout />,
+      children: [{ index: true, element: <Home /> }],
     },
     {
       path: '*',

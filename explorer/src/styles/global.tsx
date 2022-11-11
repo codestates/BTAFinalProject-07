@@ -136,6 +136,10 @@ const style = css`
   span {
     color: white;
   }
+
+  div {
+    box-sizing: border-box;
+  }
 `;
 
 const GlobalStyle = () => {
