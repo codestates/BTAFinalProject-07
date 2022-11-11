@@ -20,6 +20,7 @@ export interface PanelItem {
     }
   }
   badgeLabel: string;
+  onItemClick?: MouseEventHandler<HTMLDivElement>;
 }
 
 interface PanelProps {
@@ -39,8 +40,8 @@ function Panel({title, titleIconUrl, items, buttonText, onButtonClick}: PanelPro
       </header>
       <main>
         {
-          items.map(({ iconUrl, description, subDescription, badgeLabel }) =>
-            <div css={panelItemCss}>
+          items.map(({ iconUrl, description, subDescription, badgeLabel, onItemClick }) =>
+            <div css={panelItemCss} onClick={onItemClick}>
               <div className='panel-item-icon'>
                 <img width={40} height={40} src={iconUrl} />
               </div>
@@ -90,6 +91,11 @@ const panelItemCss = (theme: Theme) => css`
   align-items: center;
   width: 100%;
   height: 90px;
+  
+  &:hover {
+    background-color: ${theme.color.black100};
+    cursor: pointer;
+  }
   
   .panel-item {
     &-icon {

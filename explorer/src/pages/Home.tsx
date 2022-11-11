@@ -34,7 +34,10 @@ function Home({}: HomeProps) {
         description: transaction.receiver_id.slice(0, 12) + (transaction.receiver_id.length <= 12 ? '' : '...'),
       }
     },
-    badgeLabel: String(transaction.nonce).slice(0, 3) // TODO: 추후에 다른 값으로
+    badgeLabel: String(transaction.nonce).slice(0, 3), // TODO: 추후에 다른 값으로
+    onItemClick: () => {
+      navigate('/transactions/' + transaction.hash);
+    }
   })), [transactions]);
   const navigate = useNavigate();
 
@@ -71,7 +74,10 @@ function Home({}: HomeProps) {
           description: transactions.length.toString(),
         }
       },
-      badgeLabel: Number(block.header.gas_price) / 10000000 + ' Tgas'
+      badgeLabel: Number(block.header.gas_price) / 10000000 + ' Tgas',
+      onItemClick: () => {
+        navigate('/blocks/' + block.header.hash);
+      }
     }
   }
   
