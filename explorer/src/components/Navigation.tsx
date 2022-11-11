@@ -41,7 +41,7 @@ const navCss = css`
 `;
 
 const navContentCss = css`
-  max-width: 1280px;
+  max-width: 1480px;
   flex: 1;
   display: flex;
   padding: 0 30px;
