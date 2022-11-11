@@ -1,6 +1,3 @@
-import { connect, keyStores, KeyPair } from 'near-api-js';
-import { parseSeedPhrase } from 'near-seed-phrase';
-import { FiAlertCircle } from 'react-icons/fi';
 import { useNavigate } from "react-router-dom";
 import { encryptMessage, parseSeed } from '../utils/util';
 import Loading from '../Components/Loading';
@@ -38,11 +35,12 @@ const Recovery = () => {
             address:address, 
             hashPrivate:hashPrivate,
             hashMnemonic:hashMnemonic, 
+            type:'recovery',
         }
 
         setLoad(false);
         localStorage.setItem('pwd', password);
-        navigate("/create-account", {state: {...data}, type:'recovery'});
+        navigate("/create-account", {state: {...data}});
     }
 
     return <>

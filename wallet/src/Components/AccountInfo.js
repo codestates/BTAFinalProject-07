@@ -5,8 +5,8 @@ import { BiCopy } from 'react-icons/bi';
 import { useState } from "react";
 import CryptoJS from 'crypto-js';
 import Loading from './Loading';
-import '../css/App.css';
 import Alert from './Alert';
+import '../css/App.css';
 
 
 const AccountInfo = (props) => {
@@ -52,7 +52,6 @@ const AccountInfo = (props) => {
         setLoad(true);
 
         const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-        const current = JSON.parse(localStorage.getItem('current'));
         const changeAccount = userInfo[0];
         userInfo.splice(userInfo.length - 1, 1);
 

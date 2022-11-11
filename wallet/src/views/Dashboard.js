@@ -4,10 +4,8 @@ import AccountInfo from '../Components/AccountInfo';
 import engineer from '../assets/engineer_title.png';
 import { connect, keyStores } from 'near-api-js';
 import { useNavigate } from 'react-router-dom';
-import { FiAlertCircle } from 'react-icons/fi';
 import Loading from '../Components/Loading';
 import { useEffect, useState } from 'react';
-import Alert from '../Components/Alert';
 import '../css/App.css';
 
 const Dashboard = () => {
@@ -46,6 +44,7 @@ const Dashboard = () => {
                 explorerUrl: "https://explorer.testnet.near.org",
             })
 
+            
             const account = await near.account(current.name + ".testnet");
             const balance = await account.getAccountBalance();
             const calcurate = balance.available / 10 ** 24;
@@ -76,6 +75,10 @@ const Dashboard = () => {
         if (menuOpen) {setMenuOpen(false)}
         else {setMenuOpen(true)}
     };
+
+    const sendToken = () => {
+        navigate('/send-token');
+    }
 
     const createAccount = async () => {
         const password = localStorage.getItem('pwd');
@@ -153,15 +156,15 @@ const Dashboard = () => {
                 <div>
                     <div className='Bottom-Item' onClick={() => setInfoOpen(true)}>
                         <BiKey size={30} color='#373737'/>
-                        <div style={{paddingLeft:'5px', color:'#373737'}}>계정 정보</div>
+                        <div style={{paddingLeft:'5px', color:'#373737'}}>계좌 정보</div>
                     </div>
                     <div className='Bottom-Item' onClick={() => createAccount()}>
                         <BiPlus size={30} color='#373737'/>
-                        <div style={{paddingLeft:'5px', color:'#373737'}}>계정 생성</div>
+                        <div style={{paddingLeft:'5px', color:'#373737'}}>계좌 생성</div>
                     </div>
                     <div className='Bottom-Item' onClick={() => navigate('/import-account')}>
                         <BiImport size={30} color='#373737'/>
-                        <div style={{paddingLeft:'5px', color:'#373737'}}>계정 가져오기</div>
+                        <div style={{paddingLeft:'5px', color:'#373737'}}>계좌 가져오기</div>
                     </div>
                 </div>
             </div>
@@ -172,7 +175,7 @@ const Dashboard = () => {
             <p style={{fontWeight:'bold', fontSize:'20px', margin:0}}><span style={{color:"#EA973E"}}>{coin}</span> NEAR</p>
             <div style={{paddingTop:'50px', display:'flex', flexDirection:'row', justifyContent:'center'}}>
                 <div className='Button_Area'>
-                    <button><BiPaperPlane size={30}/></button>
+                    <button onClick={()=>sendToken()}><BiPaperPlane size={30}/></button>
                     <p>전송</p>
                 </div>
                 <div className='Button_Area'>

@@ -1,10 +1,9 @@
 import { encryptMessage, decryptMessage, parseSeed } from '../utils/util';
-import { FiAlertCircle } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import Loading from '../Components/Loading';
+import Alert from '../Components/Alert';
 import { useState } from "react";
 import '../css/App.css';
-import Alert from '../Components/Alert';
 
 const ImportAccount = () => {
     const [inputMnemonic, setInputMnemonic] = useState('');
@@ -56,17 +55,18 @@ const ImportAccount = () => {
             address:address, 
             hashPrivate:hashPrivate,
             hashMnemonic:hashMnemonic, 
+            type:'recovery',
         }
 
         setLoad(false);
-        navigate("/create-account", {state: {...data}, type:'recovery'});
+        navigate("/create-account", {state: {...data}});
     }
 
     return (<>
         <div style={{padding:"0 5px"}}>
             <div className="Title_div">
                 <button className="Button_Back" onClick={locationBack}>◀</button>
-                <p className="Title">계정 가져오기</p>
+                <p className="Title">계좌 가져오기</p>
             </div>
             <div style={{padding:"0 15px", textAlign:"center"}}>
                 <p style={{paddingBottom:"20px"}}>발급받았던 복구 구문을 입력해주세요.</p>

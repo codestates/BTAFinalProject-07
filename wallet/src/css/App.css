@@ -34,7 +34,11 @@
 }
 
 .Button_Back {
+  position: absolute;
+  left: 0;
   width:50px;
+  height: 50px;
+  padding-left: 10px;
   border:0px; 
   font-size:20px;
   cursor: pointer;
@@ -45,9 +49,14 @@
 
 .Title_div {
   height:50px;
-  display:flex;
   padding-top:5px;
+  text-align: center;
   border-bottom:1px solid #D3D3D3;
+}
+
+.Title-Wrap {
+  text-align: center;
+  width: 310px;
 }
 
 .Title {
@@ -56,7 +65,6 @@
   color: #EA973E;
   font-weight: 500;
   padding-top: 10px;
-  padding-left: 55px;
 }
 
 .Input {
@@ -356,4 +364,27 @@
 
 .Account-Delete button:active {
   background: #a54d43;
+}
+
+
+
+
+
+/* Account Component CSS ========== ========== ========== ========== ========== ==========*/
+.Send-Wrap {
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding:0 15px;
+  display: flex;
+
+}
+
+.Send-Info {
+  background: #D3D3D3;
+  border-radius: 10px;
+  text-align: left;
+  padding: 10px;
+  width: 250px;
 }

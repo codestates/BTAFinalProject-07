@@ -1,6 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
-import { useState } from 'react';
 
 // import { BrowserRouter } from 'react-router-dom';
 import { MemoryRouter as BrowserRouter} from 'react-router-dom';
@@ -15,6 +14,7 @@ import Dashboard from './views/Dashboard';
 import CheckMnemonic from './views/CheckMnemonic';
 import ImportAccount from './views/ImportAccount';
 import CreateAccount from './views/CreateAccount';
+import SendToken from './views/SendToken';
 
 const Router = () => {
     const history = createMemoryHistory();
@@ -25,6 +25,7 @@ const Router = () => {
             <Routes>
                 <Route path='/' element={<Main />}/>
                 <Route path='/dashboard' element={<Dashboard />}/>
+                <Route path='/send-token' element={<SendToken />} />
                 <Route path='/create-password' element={<Password />} />
                 <Route path='/create-recovery' element={<Recovery />} />
                 <Route path='/create-mnemonic' element={<Mnemonic />} />
