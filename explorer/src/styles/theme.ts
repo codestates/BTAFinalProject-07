@@ -1,5 +1,6 @@
 const theme = {
   color: {
+    black100: '#F6F6F6',
     black300: '#9A9A9A',
     black600: '#444444',
     black700: '#000000',
