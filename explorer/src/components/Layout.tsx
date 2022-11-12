@@ -32,7 +32,7 @@ const layoutCss = css`
 
 const footerCss = css`
   width: 100%;
-  height: 200px;
+  height: 100px;
 `
 
 const layoutMainCss = (theme: Theme) => css`

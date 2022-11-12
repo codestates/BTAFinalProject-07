@@ -25,8 +25,6 @@ const useTransactions = ({ initialFetchSize }: UseTransactionsParam) => {
 
       const newTransactions = chunkDetails.flatMap(chunk => chunk.transactions || []);
 
-      console.log('heeeeerrrreee', newTransactions.length);
-
       setTransactions(prev => [...prev, ...newTransactions]);
       if (currentTransactionsLength + newTransactions.length < initialFetchSize) {
         fetchNextTransactions(currentTransactionsLength + newTransactions.length);
