@@ -23,7 +23,7 @@ function Block() {
         return;
       }
       try {
-        const block = await getBlockDetail(blockId);
+        const block = await getBlockDetail(isNaN(Number(blockId)) ? blockId : Number(blockId));
         if (!block) throw Error;
         const near = await connect(config);
         const chunkDetails = await Promise.all(

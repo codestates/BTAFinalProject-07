@@ -2,12 +2,13 @@
 import { useEffect, useMemo, useState } from 'react';
 import useBlocks from '@/hooks/useBlocks';
 import useTransactions from '@/hooks/useTransactions';
-import { css } from '@emotion/react';
+import { css, Theme } from '@emotion/react';
 import Panel, { PanelItem } from '@/components/Panel';
 import { connect } from 'near-api-js';
 import { config } from '@/App';
 import { BlockResult } from 'near-api-js/lib/providers/provider';
 import { useNavigate } from 'react-router-dom';
+import useSearchInput from '@/hooks/useSearchInput';
 
 /*eslint-disable*/
 interface HomeProps {
@@ -18,6 +19,7 @@ function Home({}: HomeProps) {
   const { blocks, fetchNextBlocks } = useBlocks({ fetchSize: 10 });
   const { transactions } = useTransactions({ initialFetchSize: 10 });
   const [blocksPanelItems, setBlocksPanelItems] = useState<PanelItem[]>([]);
+  const { inputValue, handleInputChange, handleSearchBtnClick } = useSearchInput();
   const transactionsPanelItems: PanelItem[] = useMemo(() => transactions.map(transaction => ({
     iconUrl: '/assets/icon-transaction.png',
     description: {
@@ -90,7 +92,18 @@ function Home({}: HomeProps) {
   return (
     <div css={homeCss}>
       <p css={searchTextCss}> Let's scope NEAR out </p>
-      <input css={searchInputCss}/>
+      <p css={searchInputWrapCss}>
+        <input
+          css={searchInputCss}
+          value={inputValue}
+          placeholder={'Search by Account ID / Txn Hash / Block'}
+          onChange={handleInputChange}
+        />
+        <button css={searchBtnCss} onClick={handleSearchBtnClick}>
+          <img width={30} height={30} src={'/assets/icon-search.png'}/>
+        </button>
+      </p>
+
       <section css={panelSectionCss}>
         <Panel title={'Blocks'} titleIconUrl={'/assets/icon-blocks.png'} items={blocksPanelItems} buttonText={'View All Blocks'} onButtonClick={() => navigate('/blocks')}/>
         <Panel title={'Transactions'} titleIconUrl={'/assets/icon-list.png'} items={transactionsPanelItems} buttonText={'View All Transactions'} onButtonClick={() => navigate('/transactions')}/>
@@ -109,13 +122,48 @@ const searchTextCss = css`
   color: white;
 `
 
-const searchInputCss = css`
+const searchBtnCss = (theme: Theme) => css`
+  width: 80px;
+  height: 80px;
+  background-color: ${theme.color.orange100};
+`
+
+const searchInputWrapCss = css`
+  display: flex;
   margin-top: 40px;
   height: 80px;
-  width: 100%;
-  border: none;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 10px;
+  overflow: hidden;
+  
+  &:before {
+    content: '';
+    width: 80px;
+    height: 80px;
+    background-color: white;
+  }
+`
+
+const searchInputCss = (theme: Theme) => css`
+  text-align: center;
+  font-size: 24px;
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 10px;
+
+
+  &:hover {
+    border: none;
+  }
+
+  &::placeholder {
+    color: ${theme.color.black300};
+  }
+
+  &:focus::placeholder {
+    color: transparent;
+  }
 `
 
 const panelSectionCss = css`
