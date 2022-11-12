@@ -6,16 +6,22 @@ import theme from '@/styles/theme';
 interface DetailTableProps {
   title: string;
   titleIconUrl: string;
+  isIconRounded?: boolean;
   children: ReactNode;
 }
 
-function DetailTable({ title, titleIconUrl, children }: DetailTableProps) {
+function DetailTable({ title, titleIconUrl, isIconRounded = true, children }: DetailTableProps) {
   return (
     <div css={detailTableWrapCss}>
       <header>
-        <div css={iconWrapCss}>
-          <img width={30} height={30} src={titleIconUrl} />
-        </div>
+        {isIconRounded ? (
+          <div css={iconWrapCss}>
+            <img width={30} height={30} src={titleIconUrl} />
+          </div>
+        ) : (
+          <img width={40} height={40} src={titleIconUrl} />
+        )}
+
         <span css={headerTextCss}>{title}</span>
       </header>
       <table>{children}</table>
@@ -71,8 +77,8 @@ const iconWrapCss = (theme: Theme) => css`
 
 const headerTextCss = (theme: Theme) => css`
   font-size: 32px;
-  transform: translateY(3);
   color: ${theme.color.black600};
+  transform: translateY(3px);
 `;
 
 export default DetailTable;
