@@ -17,6 +17,9 @@ function Layout({}: LayoutProps) {
           <Outlet/>
         </div>
       </main>
+      <footer css={footerCss}>
+
+      </footer>
     </div>
   );
 };
@@ -25,6 +28,11 @@ const layoutCss = css`
   width: 100vw;
   height: 100vh;
   background-color: white;
+`
+
+const footerCss = css`
+  width: 100%;
+  height: 200px;
 `
 
 const layoutMainCss = (theme: Theme) => css`
