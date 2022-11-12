@@ -3,14 +3,11 @@ import { css, Theme } from '@emotion/react';
 import DetailTable from '@/components/DetailTable';
 import useTransactions from '@/hooks/useTransactions';
 import { useNavigate } from 'react-router-dom';
-
-const makeEllipsis = (target: string, maxLength: number) => {
-  return target.slice(0, maxLength) + (target.length <= maxLength ? '' : '...');
-};
+import makeEllipsis from '@/utils/makeEllipsis';
 
 function Transactions() {
   const navigate = useNavigate();
-  const { transactions, fetchNextTransactions } = useTransactions({ initialFetchSize: 10 });
+  const { transactions, fetchNextTransactions } = useTransactions({ initialFetchSize: 20 });
 
   const handleMoreBtnClick = () => {
     fetchNextTransactions();
@@ -41,11 +38,7 @@ function Transactions() {
           </thead>
           <tbody>
             {transactions.map(transaction => (
-              <tr
-                key={transaction.hash}
-                css={transactionItemCss}
-                onClick={() => handleTransactionItemClick(transaction.hash)}
-              >
+              <tr key={transaction.hash} css={itemCss} onClick={() => handleTransactionItemClick(transaction.hash)}>
                 <td></td>
                 <td>{makeEllipsis(transaction.hash, 27)}</td>
                 <td>{makeEllipsis(transaction.signer_id, 27)}</td>
@@ -56,7 +49,7 @@ function Transactions() {
           </tbody>
         </table>
         <button css={moreBtnCss} onClick={handleMoreBtnClick}>
-          More Transactions
+          More Blocks
         </button>
       </DetailTable>
     </div>
@@ -67,7 +60,7 @@ const transactionsWrapCss = css`
   margin-top: 50px;
 `;
 
-const theadCss = (theme: Theme) => css`
+export const theadCss = (theme: Theme) => css`
   height: 50px;
   background-color: ${theme.color.orange100};
 
@@ -79,14 +72,14 @@ const theadCss = (theme: Theme) => css`
   }
 `;
 
-const transactionItemCss = (theme: Theme) => css`
+export const itemCss = (theme: Theme) => css`
   cursor: pointer;
   :hover {
     background-color: ${theme.color.black100};
   }
 `;
 
-const moreBtnCss = (theme: Theme) => css`
+export const moreBtnCss = (theme: Theme) => css`
   width: 100%;
   height: 40px;
   font-size: 18px;
