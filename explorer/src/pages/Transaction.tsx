@@ -41,9 +41,6 @@ function Transaction() {
     })();
   }, [transaction]);
 
-  console.log(transaction);
-  console.log(block);
-
   return (
     <div css={transactionWrapCss}>
       <DetailTable title="Transaction Overview" titleIconUrl="/assets/icon-transaction.png">
