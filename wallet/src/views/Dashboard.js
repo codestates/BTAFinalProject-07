@@ -1,11 +1,12 @@
 import {BiPaperPlane, BiReceipt, BiUserCircle, BiCheck, BiImport, BiPlus, BiCopy, BiKey} from 'react-icons/bi';
-import { generateSeed, encryptMessage } from '../utils/util';
+import { generateSeedPhrase } from 'near-seed-phrase';
 import AccountInfo from '../Components/AccountInfo';
 import engineer from '../assets/engineer_title.png';
 import { connect, keyStores } from 'near-api-js';
 import { useNavigate } from 'react-router-dom';
 import Loading from '../Components/Loading';
 import { useEffect, useState } from 'react';
+import { CONFIG } from '../utils/util';
 import '../css/App.css';
 
 const Dashboard = () => {
@@ -20,12 +21,11 @@ const Dashboard = () => {
     const [now, setNow] = useState(0);
     const navigate = useNavigate();
 
-    let near;
     useEffect(() => {
         (async () => {
             const current = JSON.parse(localStorage.getItem('current'));
             const info = JSON.parse(localStorage.getItem('userInfo'));
-            setAddress(current.account.address.split(':')[1]);
+            setAddress(current.account.publicKey.split(':')[1]);
             setName(current.name);
             setUserInfo(info);
 
@@ -35,17 +35,12 @@ const Dashboard = () => {
                 }
             })
 
-            near = await connect({
-                networkId: "testnet",
-                keyStore: new keyStores.InMemoryKeyStore(),
-                nodeUrl: "https://rpc.testnet.near.org",
-                walletUrl: "https://wallet.testnet.near.org",
-                helperUrl: "https://helper.testnet.near.org",
-                explorerUrl: "https://explorer.testnet.near.org",
-            })
-
+            // Connect Acount.
+            const keyStore = new keyStores.BrowserLocalStorageKeyStore();
+            const near = await connect({...CONFIG, keyStore:keyStore});
+            console.log(near.config);
             
-            const account = await near.account(current.name + ".testnet");
+            const account = await near.account(current.name);
             const balance = await account.getAccountBalance();
             const calcurate = balance.available / 10 ** 24;
             const available = Math.floor(calcurate * 100000) / 100000;
@@ -76,46 +71,26 @@ const Dashboard = () => {
         else {setMenuOpen(true)}
     };
 
-    const sendToken = () => {
-        navigate('/send-token');
-    }
-
     const createAccount = async () => {
-        const password = localStorage.getItem('pwd');
-        const {seedPhrase, address, secret} = generateSeed();
-        const hashPrivate = encryptMessage(secret, password);
-        const hashMnemonic = encryptMessage(seedPhrase, password);
-        const data = {
-            address:address, 
-            hashPrivate:hashPrivate,
-            hashMnemonic:hashMnemonic, 
-        }
-
-        navigate("/create-account", {state: {...data}});
+        const {seedPhrase, secretKey, publicKey} = generateSeedPhrase();
+        const data = {mnemonic:seedPhrase, publicKey:publicKey, secretKey:secretKey, type:'new-account'};
+        navigate("/create-account", {state: data});
     }
 
     const clickAccount = async (data, index) => {
-        if (name === data.name) {
-            return;
-        }
+        if (name === data.name) return;
 
         setLoad(true);
-        near = await connect({
-            networkId: "testnet",
-            keyStore: new keyStores.InMemoryKeyStore(),
-            nodeUrl: "https://rpc.testnet.near.org",
-            walletUrl: "https://wallet.testnet.near.org",
-            helperUrl: "https://helper.testnet.near.org",
-            explorerUrl: "https://explorer.testnet.near.org",
-        })
+        const keyStore = new keyStores.BrowserLocalStorageKeyStore();
+        const near = await connect({...CONFIG, keyStore:keyStore});
 
-        const account = await near.account(data.name + ".testnet");
+        const account = await near.account(data.name);
         const balance = await account.getAccountBalance();
         const calcurate = balance.available / 10 ** 24;
         const available = Math.floor(calcurate * 100000) / 100000;
 
         localStorage.setItem('current', JSON.stringify(data));
-        setAddress(data.account.address.split(':')[1]);
+        setAddress(data.account.publicKey.split(':')[1]);
         setName(data.name);
         setCoin(available);
         setNow(index + 1);
@@ -175,7 +150,7 @@ const Dashboard = () => {
             <p style={{fontWeight:'bold', fontSize:'20px', margin:0}}><span style={{color:"#EA973E"}}>{coin}</span> NEAR</p>
             <div style={{paddingTop:'50px', display:'flex', flexDirection:'row', justifyContent:'center'}}>
                 <div className='Button_Area'>
-                    <button onClick={()=>sendToken()}><BiPaperPlane size={30}/></button>
+                    <button onClick={() => navigate('/send-token')}><BiPaperPlane size={30}/></button>
                     <p>전송</p>
                 </div>
                 <div className='Button_Area'>

@@ -1,4 +1,4 @@
-import { generateSeed, encryptMessage } from '../utils/util';
+import { generateSeedPhrase } from 'near-seed-phrase';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import '../css/App.css';
@@ -9,25 +9,16 @@ const Mnemonic = () => {
     const [copyCheck, setCopyCheck] = useState(false);
     const [encryptedData, setEncryptedData] = useState(null);
 
+    // Create SEED.
     useEffect(()=>{
-        setMnemonicPhrase();
+        (async () => {
+            const {seedPhrase, secretKey, publicKey} = generateSeedPhrase(); 
+            setMnemonic(seedPhrase);
+            setEncryptedData({mnemonic:seedPhrase, publicKey:publicKey, secretKey:secretKey});
+        })();
     }, []);
 
-    const setMnemonicPhrase = async () => {
-        const {seedPhrase, address, secret} = generateSeed();
-
-        setMnemonic(seedPhrase);
-        const hashPwd = localStorage.getItem('pwd');
-        const hashPrivate = encryptMessage(secret, hashPwd);
-        const hashMnemonic = encryptMessage(seedPhrase, hashPwd);
-        setEncryptedData({hashMnemonic:hashMnemonic, address:address, hashPrivate:hashPrivate});
-    };
-
-    const locationBack = () => {
-        navigate('/create-password');
-        return;
-    }
-
+    // Copy Mnemonic
     const clipboardCopy = () => {
         setCopyCheck(true);
         navigator.clipboard.writeText(mnemonic);
@@ -35,13 +26,13 @@ const Mnemonic = () => {
     }
 
     const goToCheckMnemonic = () => {
-        navigate("/check-mnemonic", {state: {...encryptedData}});
+        navigate("/check-mnemonic", {state: encryptedData});
     }
 
     return <>
         <div style={{padding:"0 5px"}}>
             <div className="Title_div">
-                <button className="Button_Back" onClick={locationBack}>◀</button>
+                <button className="Button_Back" onClick={() => navigate('/create-password')}>◀</button>
                 <p className="Title">비밀 복구 구문</p>
             </div>
             <div style={{padding:"0 15px", textAlign:"center"}}>

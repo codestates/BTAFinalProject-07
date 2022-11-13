@@ -2,13 +2,23 @@ import { generateSeedPhrase, parseSeedPhrase } from "near-seed-phrase";
 import { KeyPair } from "near-api-js";
 import crypto from 'crypto-js';
 
-export const generateSeed = () => {
-    const {seedPhrase, secretKey} = generateSeedPhrase();
-    const recoveryKeyPair = KeyPair.fromString(secretKey);
+export const CONFIG = {
+    networkId: "testnet",
+    nodeUrl: "https://rpc.testnet.near.org",
+    walletUrl: "https://wallet.testnet.near.org",
+    helperUrl: "https://helper.testnet.near.org",
+    explorerUrl: "https://explorer.testnet.near.org",
+}
+
+export const generateSeed = (password) => {
+    const {seedPhrase, secretKey, publicKey} = generateSeedPhrase();
+    const hashMnemonic = encryptMessage(seedPhrase, password);
+    const hashSecretkey = encryptMessage(secretKey, password);
+
     return {
-        seedPhrase: seedPhrase,
-        address: recoveryKeyPair.getPublicKey().toString(),
-        secret: recoveryKeyPair.secretKey
+        mnemonic: hashMnemonic,
+        publicKey: publicKey,
+        secretKey: hashSecretkey,
     };
 }
 
@@ -37,4 +47,4 @@ export const decryptMessage = (cipherText, secret) => {
     let decryptedText = JSON.parse(bytes.toString(crypto.enc.Utf8));
   
     return decryptedText;
-  };
+};

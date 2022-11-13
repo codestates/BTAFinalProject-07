@@ -1,5 +1,4 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { decryptMessage } from '../utils/util';
 import { useState } from "react";
 import '../css/App.css'
 
@@ -9,29 +8,22 @@ const CheckMnemonic = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const locationBack = () => {
-        navigate('/create-password');
-        return;
-    }
-
+    // Validate Exception.
     const compareMnemonic = async () => {
-        const password = localStorage.getItem('pwd');
-        const decryptMnemonic = decryptMessage(location.state.hashMnemonic, password);
-        
-        // Compare Value
-        if (decryptMnemonic !== inputMnemonic) {
+        if (location.state.mnemonic !== inputMnemonic) {
             setChkValue(true);
-            setTimeout(()=> {setChkValue(false)}, 1000)
-            return;
+            setTimeout(()=> {
+                setChkValue(false)
+            }, 1000); return;
         }
 
-        navigate('/create-account', {state: {...location.state}});
+        navigate('/create-account', {state: location.state});
     }
 
     return <>
         <div style={{padding:"0 5px"}}>
             <div className="Title_div">
-                <button className="Button_Back" onClick={locationBack}>◀</button>
+                <button className="Button_Back" onClick={() => navigate('/create-password')}>◀</button>
                 <p className="Title">복구 구문 확인</p>
             </div>
             <div style={{padding:"0 15px", textAlign:"center"}}>

@@ -25,7 +25,7 @@ const Password = () => {
         setTimeout(() => {
             setLoad(false);
             navigate("/create-mnemonic");
-        }, 500)
+        }, 200)
     }
     
     const locationBack = () => {

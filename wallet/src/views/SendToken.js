@@ -1,6 +1,5 @@
 import { connect, keyStores } from "near-api-js";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Loading from "../Components/Loading";
 import Title from "../Components/Title";
 
