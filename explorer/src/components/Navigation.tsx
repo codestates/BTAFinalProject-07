@@ -2,10 +2,26 @@
 import { css, Theme } from '@emotion/react';
 import { Link, useLocation } from 'react-router-dom';
 import useSearchInput from '@/hooks/useSearchInput';
+import { ChangeEvent, useEffect, useState } from 'react';
+
+export type NearScopeNetwork = 'testnet' | 'localnet';
 
 function Navigation() {
   const location = useLocation();
+  const [network, setNetwork] = useState<NearScopeNetwork>('testnet');
   const { inputValue, handleInputChange, handleSearchBtnClick } = useSearchInput();
+
+  const handleNetworkSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const network = e.currentTarget.value as NearScopeNetwork;
+    localStorage.setItem('NEAR_SCOPE_NETWORK', network);
+    window.location.href = '/';
+  };
+
+  useEffect(() => {
+    const initialNetwork = localStorage.getItem('NEAR_SCOPE_NETWORK');
+    if (!initialNetwork || !['testnet', 'localnet'].includes(initialNetwork)) return;
+    setNetwork(initialNetwork as NearScopeNetwork);
+  }, []);
 
   return (
     <nav css={navCss}>
@@ -16,6 +32,10 @@ function Navigation() {
             <span className="logo-text-near">NEAR</span>
             <span className="logo-text-scope">SCOPE</span>
           </div>
+          <select css={networkSelectCss} value={network} onChange={handleNetworkSelectChange}>
+            <option value={'testnet'}>Testnet</option>
+            <option value={'localnet'}>Localnet</option>
+          </select>
         </div>
         <span css={rightWrapCss}>
           {location.pathname !== '/' && (
@@ -47,6 +67,13 @@ function Navigation() {
     </nav>
   );
 }
+
+const networkSelectCss = (theme: Theme) => css`
+  margin-left: 10px;
+  border: 1px solid ${theme.color.orange200};
+  height: 25px;
+  transform: translateY(2px);
+`;
 
 const rightWrapCss = css`
   display: flex;

@@ -1,8 +1,8 @@
 import { connect } from 'near-api-js';
 import { BlockResult } from 'near-api-js/lib/providers/provider';
-import { config } from '@/App';
 import getBlockDetail from '@/utils/getBlockDetail';
 import { useEffect, useState } from 'react';
+import getConnectConfig from '@/utils/getConnectConfig';
 
 interface UseBlocksParam {
   fetchSize: number;
@@ -17,7 +17,7 @@ const useBlocks = ({ fetchSize }: UseBlocksParam) => {
   }, []);
 
   async function fetchNextBlocks(isRefetching: boolean = false) {
-    const near = await connect(config);
+    const near = await connect(getConnectConfig());
     const lastBlock = await getBlockDetail(isRefetching ? undefined : prevBlockHash || undefined);
     const blockHashArr = [lastBlock.header.hash];
     let _prevBlockHash = lastBlock.header.prev_hash;

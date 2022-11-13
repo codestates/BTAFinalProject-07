@@ -5,10 +5,10 @@ import useTransactions from '@/hooks/useTransactions';
 import { css, Theme } from '@emotion/react';
 import Panel, { PanelItem } from '@/components/Panel';
 import { connect } from 'near-api-js';
-import { config } from '@/App';
 import { BlockResult } from 'near-api-js/lib/providers/provider';
 import { useNavigate } from 'react-router-dom';
 import useSearchInput from '@/hooks/useSearchInput';
+import getConnectConfig from '@/utils/getConnectConfig';
 
 /*eslint-disable*/
 interface HomeProps {
@@ -55,7 +55,7 @@ function Home({}: HomeProps) {
 
   
   async function getBlockPanelItem(block: BlockResult): Promise<PanelItem> {
-    const near = await connect(config);
+    const near = await connect(getConnectConfig());
     const chunkHashArr = block.chunks.map(({ chunk_hash }) => chunk_hash);
     const chunkDetails = await Promise.all(chunkHashArr.map(chunk => near.connection.provider.chunk(chunk)));
     const transactions = chunkDetails.flatMap(chunk => chunk.transactions || []);

@@ -2,7 +2,7 @@ import useBlocks from '@/hooks/useBlocks';
 import { useEffect, useState } from 'react';
 import { Transaction } from 'near-api-js/lib/providers/provider';
 import { connect } from 'near-api-js';
-import { config } from '@/App';
+import getConnectConfig from '@/utils/getConnectConfig';
 
 interface UseTransactionsParam {
   initialFetchSize: number;
@@ -21,7 +21,7 @@ const useTransactions = ({ initialFetchSize }: UseTransactionsParam) => {
     currentFetchCount?: number,
   ) {
     try {
-      const near = await connect(config);
+      const near = await connect(getConnectConfig());
       const blocks = await fetchNextBlocks();
       const chunkHashArr = blocks.flatMap(block => block.chunks.map(({ chunk_hash }) => chunk_hash));
       const chunkDetails = await Promise.all(chunkHashArr.map(chunk => near.connection.provider.chunk(chunk)));
