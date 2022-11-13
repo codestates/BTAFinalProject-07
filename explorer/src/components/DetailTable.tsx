@@ -5,7 +5,7 @@ import theme from '@/styles/theme';
 
 interface DetailTableProps {
   title: string;
-  titleIconUrl: string;
+  titleIconUrl?: string;
   isIconRounded?: boolean;
   children: ReactNode;
 }
@@ -14,14 +14,15 @@ function DetailTable({ title, titleIconUrl, isIconRounded = true, children }: De
   return (
     <div css={detailTableWrapCss}>
       <header>
-        {isIconRounded ? (
-          <div css={iconWrapCss}>
-            <img width={30} height={30} src={titleIconUrl} />
-          </div>
-        ) : (
-          <img width={40} height={40} src={titleIconUrl} />
-        )}
-
+        {titleIconUrl ? (
+          isIconRounded ? (
+            <div css={iconWrapCss}>
+              <img width={30} height={30} src={titleIconUrl} />
+            </div>
+          ) : (
+            <img width={40} height={40} src={titleIconUrl} />
+          )
+        ) : undefined}
         <span css={headerTextCss}>{title}</span>
       </header>
       <table>{children}</table>
