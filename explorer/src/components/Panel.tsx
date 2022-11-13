@@ -201,6 +201,9 @@ const panelCss = (theme: Theme) => css`
     border-top: 1px solid ${theme.color.orange600};
     border-bottom: 1px solid ${theme.color.orange600};
     overflow: auto;
+    ::-webkit-scrollbar {
+      display: none;
+    }
   }
   
   & > footer {
