@@ -38,7 +38,6 @@ const Dashboard = () => {
             // Connect Acount.
             const keyStore = new keyStores.BrowserLocalStorageKeyStore();
             const near = await connect({...CONFIG, keyStore:keyStore});
-            console.log(near.config);
             
             const account = await near.account(current.name);
             const balance = await account.getAccountBalance();

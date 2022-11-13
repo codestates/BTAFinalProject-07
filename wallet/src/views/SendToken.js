@@ -2,6 +2,7 @@ import { connect, keyStores } from "near-api-js";
 import { useEffect, useState } from "react";
 import Loading from "../Components/Loading";
 import Title from "../Components/Title";
+import { CONFIG } from "../utils/util";
 
 
 const SendToken = () => {
@@ -11,7 +12,20 @@ const SendToken = () => {
     const [load, setLoad] = useState(false);
     const [coin, setCoin] = useState(0);
     const [send, setSend] = useState('');
-    let near;
+
+    useEffect(() => {
+        const current = JSON.parse(localStorage.getItem('current'));
+        setCurrent(current);
+        (async () => {
+            const keyStore = new keyStores.BrowserLocalStorageKeyStore();
+            const near = await connect({...CONFIG, keyStore:keyStore});
+            const account = await near.account(current.name);
+            const balance = await account.getAccountBalance();
+            const calcurate = balance.available / 10 ** 24;
+            const available = Math.floor(calcurate * 100000) / 100000;
+            setCoin(available);
+        })();
+    }, []);
 
     const fnClick = async () => {
         if (!receiver || !send) {
@@ -19,44 +33,16 @@ const SendToken = () => {
         }
 
         setLoad(true);
-        near = await connect({
-            networkId: "testnet",
-            keyStore: new keyStores.InMemoryKeyStore(),
-            nodeUrl: "https://rpc.testnet.near.org",
-            walletUrl: "https://wallet.testnet.near.org",
-            helperUrl: "https://helper.testnet.near.org",
-            explorerUrl: "https://explorer.testnet.near.org",
-        })
-
-        const sender = current.name + '.testnet';
-        const account = await near.account(sender);
+        const keyStore = new keyStores.BrowserLocalStorageKeyStore();
+        const near = await connect({...CONFIG, keyStore:keyStore});
+        const account = await near.account(current.name);
         const transaction = await account.sendMoney(receiver+'.testnet', send * (10 ** 24));
 
-        console.log(transaction);
-
+        if (!transaction) {
+            setCheck(true);
+            setTimeout(() => setCheck(false), 1000);
+        } console.log(transaction);
     }
-
-    useEffect(() => {
-        const current = JSON.parse(localStorage.getItem('current'));
-        setCurrent(current);
-        (async () => {
-            near = await connect({
-                networkId: "testnet",
-                keyStore: new keyStores.InMemoryKeyStore(),
-                nodeUrl: "https://rpc.testnet.near.org",
-                walletUrl: "https://wallet.testnet.near.org",
-                helperUrl: "https://helper.testnet.near.org",
-                explorerUrl: "https://explorer.testnet.near.org",
-            })
-    
-            const account = await near.account(current.name + ".testnet");
-            const balance = await account.getAccountBalance();
-            const calcurate = balance.available / 10 ** 24;
-            const available = Math.floor(calcurate * 100000) / 100000;
-            setCoin(available);
-        })();
-
-    }, []);
 
     return <>
         <div style={{padding:"0 5px"}}>

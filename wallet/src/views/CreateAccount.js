@@ -1,10 +1,10 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import { connect, keyStores, KeyPair, WalletConnection } from 'near-api-js';
+import { connect, keyStores, KeyPair } from 'near-api-js';
 import Loading from '../Components/Loading';
 import Alert from '../Components/Alert';
+import { CONFIG } from '../utils/util';
 import { useState } from 'react';
 import '../css/App.css';
-import { CONFIG, encryptMessage } from '../utils/util';
 
 const CreateAccount = () => {
     const [accountID, setAccountID] = useState('');
@@ -32,39 +32,21 @@ const CreateAccount = () => {
         await keyStore.setKey('testnet', id, keyPair);
 
         const near = await connect({...CONFIG, keyStore:keyStore});
-        const wallet = new WalletConnection(near);
-        wallet.requestSignIn({
-            contractId: id,
-            successUrl: 'localhost:3000/dashboard'
-        });
+        await near.account(id);
 
-        const account = (location.state.type === 'new-account')
-            ? await near.account(info[0].name)
-            : await near.account(id);
-
-        console.log(await account.getAccountDetails());
-        await account.addKey(keyPair.secretKey.toString(), id);
-        // if (location.state.type === 'new-account') {
-        //     await account.createAccount(
-        //         id, keyPair.publicKey.toString()
-        //     );
-        // }
-
-        // saveUserInfo(id);
+        saveUserInfo(id);
     }
 
     // Save User in LocalStrage.
     const saveUserInfo = (id) => {
         const info = JSON.parse(localStorage.getItem('userInfo'));
         const userInfo = []; if (info) userInfo.push(...info);
-        const password = localStorage.getItem('pwd');
 
         const newUser = {
             name: id,
             account : {
                 publicKey: location.state.publicKey,
                 secretKey: location.state.secretKey,
-                // secretKey: encryptMessage(location.state.secretKey, password)
             }
         }
 
