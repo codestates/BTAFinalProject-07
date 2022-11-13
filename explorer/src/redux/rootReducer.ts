@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
 import { api } from '@/api';
-import homeSlice from '@/redux/slices/homeSlice';
+import networkSlice from '@/redux/slices/networkSlice';
 
 const rootReducer = combineReducers({
-  home: homeSlice,
+  network: networkSlice,
   [api.reducerPath]: api.reducer,
 });
 

@@ -6,7 +6,7 @@ import DetailTable from '@/components/DetailTable';
 import getBlockDetail from '@/utils/getBlockDetail';
 import { css, Theme } from '@emotion/react';
 import { connect } from 'near-api-js';
-import { config } from '@/App';
+import getConnectConfig from '@/utils/getConnectConfig';
 
 function Block() {
   const params = useParams();
@@ -25,7 +25,7 @@ function Block() {
       try {
         const block = await getBlockDetail(isNaN(Number(blockId)) ? blockId : Number(blockId));
         if (!block) throw Error;
-        const near = await connect(config);
+        const near = await connect(getConnectConfig());
         const chunkDetails = await Promise.all(
           block.chunks.map(({ chunk_hash }) => near.connection.provider.chunk(chunk_hash)),
         );

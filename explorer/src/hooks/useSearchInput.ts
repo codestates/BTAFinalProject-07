@@ -2,6 +2,7 @@ import { ChangeEvent, useState } from 'react';
 import getBlockDetail from '@/utils/getBlockDetail';
 import { useNavigate } from 'react-router-dom';
 import getTransactionDetail from '@/utils/getTransactionDetail';
+import getAccountDetail from '@/utils/getAccountDetail';
 
 const useSearchInput = () => {
   const [inputValue, setInputValue] = useState('');
@@ -22,6 +23,13 @@ const useSearchInput = () => {
     try {
       await getBlockDetail(isNaN(Number(inputValue)) ? inputValue : Number(inputValue));
       navigate('/blocks/' + inputValue);
+      return;
+    } catch (e) {
+      console.error(e);
+    }
+    try {
+      await getAccountDetail(inputValue);
+      navigate('/account?id=' + inputValue);
       return;
     } catch (e) {
       console.error(e);

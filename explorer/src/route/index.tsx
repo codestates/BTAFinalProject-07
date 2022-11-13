@@ -6,6 +6,7 @@ import Transactions from '@/pages/Transactions';
 import Transaction from '@/pages/Transaction';
 import Block from '@/pages/Block';
 import Blocks from '@/pages/Blocks';
+import Account from '@/pages/Account';
 
 const Router = () => {
   return useRoutes([
@@ -27,6 +28,10 @@ const Router = () => {
             { index: true, element: <Blocks /> },
             { path: ':id', element: <Block /> },
           ],
+        },
+        {
+          path: '/account',
+          element: <Account />,
         },
       ],
     },
