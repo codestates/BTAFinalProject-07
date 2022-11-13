@@ -7,10 +7,11 @@ import useBlocks from '@/hooks/useBlocks';
 import {itemCss, moreBtnCss, theadCss} from '@/pages/Transactions';
 import makeEllipsis from '@/utils/makeEllipsis';
 import getPastDateDiff from '@/utils/getDateDiff';
+import {BallTriangle, InfinitySpin, Oval} from 'react-loader-spinner';
 
 function Blocks() {
   const navigate = useNavigate();
-  const { blocks, fetchNextBlocks } = useBlocks({fetchSize: 20})
+  const { blocks, fetchNextBlocks, isFetching } = useBlocks({fetchSize: 20})
 
   const handleMoreBtnClick = () => {
     fetchNextBlocks();
@@ -57,8 +58,12 @@ function Blocks() {
           ))}
           </tbody>
         </table>
-        <button css={moreBtnCss} onClick={handleMoreBtnClick}>
-          More Blocks
+        <button css={moreBtnCss} onClick={handleMoreBtnClick} disabled={isFetching}>
+          {
+            isFetching
+              ? <Oval width='30' height='30' color={'#fff'} secondaryColor={'#fff'}/>
+              : 'More Blocks'
+          }
         </button>
       </DetailTable>
     </div>

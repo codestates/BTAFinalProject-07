@@ -4,10 +4,11 @@ import DetailTable from '@/components/DetailTable';
 import useTransactions from '@/hooks/useTransactions';
 import { useNavigate } from 'react-router-dom';
 import makeEllipsis from '@/utils/makeEllipsis';
+import { Oval } from 'react-loader-spinner';
 
 function Transactions() {
   const navigate = useNavigate();
-  const { transactions, fetchNextTransactions } = useTransactions({ initialFetchSize: 20 });
+  const { transactions, fetchNextTransactions, isFetching } = useTransactions({ initialFetchSize: 20 });
 
   const handleMoreBtnClick = () => {
     fetchNextTransactions();
@@ -59,8 +60,8 @@ function Transactions() {
             ))}
           </tbody>
         </table>
-        <button css={moreBtnCss} onClick={handleMoreBtnClick}>
-          More Blocks
+        <button css={moreBtnCss} onClick={handleMoreBtnClick} disabled={isFetching}>
+          {isFetching ? <Oval width="30" height="30" color={'#fff'} secondaryColor={'#fff'} /> : 'More Blocks'}
         </button>
       </DetailTable>
     </div>
@@ -91,6 +92,9 @@ export const itemCss = (theme: Theme) => css`
 `;
 
 export const moreBtnCss = (theme: Theme) => css`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
   height: 40px;
   font-size: 18px;
@@ -99,8 +103,8 @@ export const moreBtnCss = (theme: Theme) => css`
   background-color: ${theme.color.orange600};
   margin-bottom: 20px;
 
-  &:hover {
-    background-color: ${theme.color.orange700};
+  &:hover:not(:disabled) {
+    background-color: ${theme.color.orange800};
   }
 `;
 

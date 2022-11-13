@@ -13,6 +13,7 @@ const useTransactions = ({ initialFetchSize }: UseTransactionsParam) => {
   const [transactions, setTransactions] = useState<(Transaction & { status: FinalExecutionStatus })[]>([]);
   const { fetchNextBlocks } = useBlocks({ fetchSize: initialFetchSize });
   const [isFirstLoading, setIsFirstLoading] = useState(true);
+  const [isFetching, setIsFetching] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -26,6 +27,7 @@ const useTransactions = ({ initialFetchSize }: UseTransactionsParam) => {
     currentFetchCount?: number,
   ) {
     try {
+      setIsFetching(true);
       const isRefetching = currentFetchCount === 0;
       const near = await connect(getConnectConfig());
       const blocks = await fetchNextBlocks(isRefetching);
@@ -54,6 +56,7 @@ const useTransactions = ({ initialFetchSize }: UseTransactionsParam) => {
     } catch (e) {
       console.error(e);
     }
+    setIsFetching(false);
   }
 
   const refetch = () => {
@@ -65,6 +68,7 @@ const useTransactions = ({ initialFetchSize }: UseTransactionsParam) => {
     fetchNextTransactions,
     refetch,
     isFirstLoading,
+    isFetching,
   };
 };
 

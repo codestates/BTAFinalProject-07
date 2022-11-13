@@ -217,7 +217,7 @@ const panelCss = (theme: Theme) => css`
       color: white;
       font-size: 20px;
       &:hover {
-        background-color: ${theme.color.orange700};
+        background-color: ${theme.color.orange800};
       }
     }
   }

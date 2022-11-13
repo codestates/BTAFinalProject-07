@@ -4,6 +4,7 @@ const theme = {
     black300: '#9A9A9A',
     black600: '#444444',
     black700: '#000000',
+    orange800: '#F26700',
     orange700: '#FF6C00',
     orange600: '#FF7915',
     orange200: '#FFBF90',
