@@ -48,7 +48,7 @@ const SendToken = () => {
         <div style={{padding:"0 5px"}}>
             <Title title={'NEAR 전송'} locate={'/dashboard'}/>
             <div className="Send-Wrap">
-                <p style={{margin:0, paddingTop:'15px', paddingBottom:'5px'}}>내 계좌</p>
+                <p style={{margin:0, paddingTop:'15px', paddingBottom:'5px'}}>내 계정</p>
                 <div className="Send-Info">
                     <p style={{margin:0}}>
                         <span style={{fontWeight:'bold'}}>ID &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;</span>
@@ -62,7 +62,7 @@ const SendToken = () => {
                 <div>
                     <div style={{marginTop:"30px"}}>
                         <div>
-                            <div style={{textAlign:"left", padding:"5px"}}>전송 계좌</div>
+                            <div style={{textAlign:"left", padding:"5px"}}>전송 계정</div>
                             <div style={{display:'flex'}}>
                                 <input type={"text"} className="Input" onChange={(e) => setReceiver(e.target.value)} value={receiver} style={{width:'200px', paddingLeft:'10px'}}></input>
                                 <p style={{color:'#D3D3D3', fontSize:'20px', margin:0, paddingTop:'5px'}}>&nbsp;.testnet</p>
@@ -77,7 +77,7 @@ const SendToken = () => {
                         </div>
                     </div>
                     <div style={{textAlign:"center", marginTop:"40px"}}>
-                        <p style={{transition:"all 0.5s", paddingLeft:"10px", fontWeight:'bold', margin:"0px", color:(check ? "red" : "white")}}>유효하지 않은 계좌입니다.</p>
+                        <p style={{transition:"all 0.5s", paddingLeft:"10px", fontWeight:'bold', margin:"0px", color:(check ? "red" : "white")}}>유효하지 않은 계정입니다.</p>
                         <button type="number" className="Button_Filled" onClick={() => fnClick()} style={{backgroundColor:(!receiver || !send)?"#D3D3D3":"#EA973E"}}>전송</button>
                     </div>
                 </div>

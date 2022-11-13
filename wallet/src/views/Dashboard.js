@@ -1,4 +1,4 @@
-import {BiPaperPlane, BiReceipt, BiUserCircle, BiCheck, BiImport, BiPlus, BiCopy, BiKey} from 'react-icons/bi';
+import {BiPaperPlane, BiReceipt, BiUserCircle, BiCheck, BiPlus, BiCopy, BiKey} from 'react-icons/bi';
 import { generateSeedPhrase } from 'near-seed-phrase';
 import AccountInfo from '../Components/AccountInfo';
 import engineer from '../assets/engineer_title.png';
@@ -72,7 +72,7 @@ const Dashboard = () => {
 
     const createAccount = async () => {
         const {seedPhrase, secretKey, publicKey} = generateSeedPhrase();
-        const data = {mnemonic:seedPhrase, publicKey:publicKey, secretKey:secretKey, type:'new-account'};
+        const data = {mnemonic:seedPhrase, publicKey:publicKey, secretKey:secretKey};
         navigate("/create-account", {state: data});
     }
 
@@ -111,7 +111,7 @@ const Dashboard = () => {
             </div>
 
             {/* Menu Modal Area Start ========== ========== ========== ========== ==========*/}
-            <div className='Modal' style={{visibility:(menuOpen)?'':'hidden', width:(menuOpen)?'200px':0, height:(menuOpen)?'320px':0}}>
+            <div className='Modal' style={{visibility:(menuOpen)?'':'hidden', width:(menuOpen)?'200px':0, height:(menuOpen)?'280px':0}}>
                 <div className='Modiv' style={{borderBottom:'1px solid #D3D3D3'}}>
                     <div className='Modiv' style={{width:'80px', padding:'5px 0px'}}>내 계정</div>
                 </div>
@@ -130,15 +130,11 @@ const Dashboard = () => {
                 <div>
                     <div className='Bottom-Item' onClick={() => setInfoOpen(true)}>
                         <BiKey size={30} color='#373737'/>
-                        <div style={{paddingLeft:'5px', color:'#373737'}}>계좌 정보</div>
+                        <div style={{paddingLeft:'5px', color:'#373737'}}>계정 정보</div>
                     </div>
                     <div className='Bottom-Item' onClick={() => createAccount()}>
                         <BiPlus size={30} color='#373737'/>
-                        <div style={{paddingLeft:'5px', color:'#373737'}}>계좌 생성</div>
-                    </div>
-                    <div className='Bottom-Item' onClick={() => navigate('/import-account')}>
-                        <BiImport size={30} color='#373737'/>
-                        <div style={{paddingLeft:'5px', color:'#373737'}}>계좌 가져오기</div>
+                        <div style={{paddingLeft:'5px', color:'#373737'}}>계정 생성</div>
                     </div>
                 </div>
             </div>

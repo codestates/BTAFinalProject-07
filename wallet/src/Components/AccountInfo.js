@@ -1,4 +1,3 @@
-import { decryptMessage } from '../utils/util';
 import { FiAlertCircle } from 'react-icons/fi';
 import { IoMdClose } from 'react-icons/io';
 import { BiCopy } from 'react-icons/bi';
@@ -19,7 +18,6 @@ const AccountInfo = (props) => {
     const [deSecret, setDeSecret] = useState('');
     const [confirm, setConfirm] = useState(false);
     const [showInfo, setShowInfo] = useState(false);
-    const [deMnemonic, setDeMnemonic] = useState('');
     const current = JSON.parse(localStorage.getItem('current'));
 
     const buttonCss = {
@@ -42,8 +40,7 @@ const AccountInfo = (props) => {
             return false;
         }
 
-        setDeSecret(decryptMessage(current.account.hashSecret, wallet_password));
-        setDeMnemonic(decryptMessage(current.account.hashMnemonic, wallet_password));
+        setDeSecret(current.account.secretKey);
         setShowInfo(true);
     }
 
@@ -65,7 +62,7 @@ const AccountInfo = (props) => {
             localStorage.removeItem('pwd');
         }
 
-        setMessage('계좌 삭제 완료.');
+        setMessage('계정 삭제 완료.');
         setLoad(false);
         setAlert(true);
     }
@@ -74,14 +71,12 @@ const AccountInfo = (props) => {
         setPassword('');
         setDeSecret('');
         setCheck(false);
-        setDeMnemonic('');
         setShowInfo(false); 
         props.setOpen(false);
     }
 
-    const copyData = (type) => {
-        if (type === 'secret') navigator.clipboard.writeText(deSecret);
-        if (type === 'mnemonic') navigator.clipboard.writeText(deMnemonic);
+    const copyData = () => {
+        navigator.clipboard.writeText(deSecret);
         setCopy(true); setTimeout(() => setCopy(false), 1000);
     }
 
@@ -95,7 +90,7 @@ const AccountInfo = (props) => {
             </div>
             <div style={{padding:'5px', textAlign:'center', display:(showInfo ? 'none' : 'block')}}>
                 <div>
-                    <p style={{margin:0}}>계좌 정보 확인을 위해 <br />비밀번호를 입력해주세요.</p>
+                    <p style={{margin:0}}>계정 정보 확인을 위해 <br />비밀번호를 입력해주세요.</p>
                     <input value={password} type='password' className='Input' style={{width:'200px', marginTop:'30px'}} onChange={(e) => setPassword(e.target.value)}/>
                     <p style={{margin:0, fontSize:'13px', color:(check ? '#EA973E' : 'white'), transition:'all, 0.3s'}}>비밀번호가 일치하지 않습니다.</p>
                     <button className='Button_Filled' style={buttonCss} onClick={() => checkPassword()}>확인</button>
@@ -103,16 +98,8 @@ const AccountInfo = (props) => {
             </div>
             <div style={{padding:'5px', textAlign:'center', display:(showInfo ? 'block' : 'none')}}>
                 <div style={{padding:'5px'}}>
-                    <p style={{margin:0}}>복구 코드 <BiCopy /></p>
-                    <div className='Account-Info' onClick={() => copyData('mnemonic')}>
-                        <p style={{margin:0, fontWeight:'bold'}}>
-                            {deMnemonic}
-                        </p>
-                    </div>
-                </div>
-                <div style={{padding:'5px'}}>
                     <p style={{margin:0}}>비밀 키 <BiCopy /></p>
-                    <div className='Account-Info' onClick={() => copyData('secret')}>
+                    <div className='Account-Info' onClick={() => copyData()}>
                         <p style={{margin:0, fontWeight:'bold'}}>
                             {String(deSecret).substring(0, 15) + '...'}
                         </p>

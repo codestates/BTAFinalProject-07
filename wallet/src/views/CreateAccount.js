@@ -73,7 +73,7 @@ const CreateAccount = () => {
             </div>
         </div>
         {<Loading load={load}/>}
-        {<Alert alert={alert} message={'계좌 생성 완료.'} go={'/dashboard'}/>}
+        {<Alert alert={alert} message={'계정 생성 완료.'} go={'/dashboard'}/>}
     </>
 }
 

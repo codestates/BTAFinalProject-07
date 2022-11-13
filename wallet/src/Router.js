@@ -11,10 +11,9 @@ import Mnemonic from './views/Mnemonic';
 import Header from './Components/Header';
 import Footer from './Components/Footer';
 import Dashboard from './views/Dashboard';
-import CheckMnemonic from './views/CheckMnemonic';
-import ImportAccount from './views/ImportAccount';
-import CreateAccount from './views/CreateAccount';
 import SendToken from './views/SendToken';
+import CheckMnemonic from './views/CheckMnemonic';
+import CreateAccount from './views/CreateAccount';
 
 const Router = () => {
     const history = createMemoryHistory();
@@ -29,7 +28,6 @@ const Router = () => {
                 <Route path='/create-password' element={<Password />} />
                 <Route path='/create-recovery' element={<Recovery />} />
                 <Route path='/create-mnemonic' element={<Mnemonic />} />
-                <Route path='/import-account' element={<ImportAccount />} />
                 <Route path='/check-mnemonic' element={<CheckMnemonic />} />
                 <Route path='/create-account' element={<CreateAccount />} />
             </Routes>

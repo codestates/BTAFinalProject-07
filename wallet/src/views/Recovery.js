@@ -1,5 +1,5 @@
+import { parseSeedPhrase } from "near-seed-phrase";
 import { useNavigate } from "react-router-dom";
-import { encryptMessage, parseSeed } from '../utils/util';
 import Loading from '../Components/Loading';
 import CryptoJS from 'crypto-js';
 import { useState } from "react";
@@ -13,11 +13,6 @@ const Recovery = () => {
     const [chk, setChk] = useState("");
     const navigate = useNavigate();
 
-    const locationBack = () => {
-        navigate('/');
-        return;
-    }
-
     const recoverAccount = async () => {
         if (!inputMnemonic || !pwd || pwd !== chk) return;
         if (inputMnemonic.split(' ').length !== 12) {
@@ -28,25 +23,18 @@ const Recovery = () => {
 
         setLoad(true);
         const password = CryptoJS.SHA256(pwd).toString()
-        const {mnemonic, secretKey, address} = parseSeed(inputMnemonic);
-        const hashPrivate = encryptMessage(secretKey, password);
-        const hashMnemonic = encryptMessage(mnemonic, password);
-        const data = {
-            address:address, 
-            hashPrivate:hashPrivate,
-            hashMnemonic:hashMnemonic, 
-            type:'recovery',
-        }
+        const {seedPhrase, publicKey, secretKey} = parseSeedPhrase(inputMnemonic);
+        const data = {mnemonic:seedPhrase, publicKey:publicKey, secretKey:secretKey};
 
         setLoad(false);
         localStorage.setItem('pwd', password);
-        navigate("/create-account", {state: {...data}});
+        navigate("/create-account", {state: data});
     }
 
     return <>
         <div style={{padding:"0 5px"}}>
             <div className="Title_div">
-                <button className="Button_Back" onClick={locationBack}>◀</button>
+                <button className="Button_Back" onClick={() => navigate('/')}>◀</button>
                 <p className="Title">계정 복구 진행</p>
             </div>
             <div style={{padding:"0 15px", textAlign:"center"}}>
