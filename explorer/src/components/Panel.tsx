@@ -7,7 +7,7 @@ export interface PanelItem {
   iconUrl: string;
   description: {
     first: string;
-    second: string;
+    second?: string;
   },
   subDescription: {
     first: {
@@ -40,8 +40,8 @@ function Panel({title, titleIconUrl, items, buttonText, onButtonClick}: PanelPro
       </header>
       <main>
         {
-          items.map(({ iconUrl, description, subDescription, badgeLabel, onItemClick }) =>
-            <div css={panelItemCss} onClick={onItemClick}>
+          items.map(({ iconUrl, description, subDescription, badgeLabel, onItemClick }, idx) =>
+            <div key={idx} css={panelItemCss} onClick={onItemClick}>
               <div className='panel-item-icon'>
                 <img width={40} height={40} src={iconUrl} />
               </div>
@@ -50,7 +50,7 @@ function Panel({title, titleIconUrl, items, buttonText, onButtonClick}: PanelPro
               {description.first}
             </span>
                 <span>
-              {description.second}
+              {description.second ?? ''}
             </span>
               </div>
               <div className='panel-item-sub-descriptions'>

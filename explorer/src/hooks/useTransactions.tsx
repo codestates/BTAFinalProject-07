@@ -21,14 +21,16 @@ const useTransactions = ({ initialFetchSize }: UseTransactionsParam) => {
     currentFetchCount?: number,
   ) {
     try {
+      const isRefetching = currentFetchCount === 0;
       const near = await connect(getConnectConfig());
-      const blocks = await fetchNextBlocks();
+      const blocks = await fetchNextBlocks(isRefetching);
       const chunkHashArr = blocks.flatMap(block => block.chunks.map(({ chunk_hash }) => chunk_hash));
       const chunkDetails = await Promise.all(chunkHashArr.map(chunk => near.connection.provider.chunk(chunk)));
 
       const newTransactions = chunkDetails.flatMap(chunk => chunk.transactions || []);
 
-      setTransactions(prev => [...prev, ...newTransactions]);
+      console.log('isRe', isRefetching);
+      setTransactions(prev => (isRefetching ? [...newTransactions] : [...prev, ...newTransactions]));
       const needsToNextFetch =
         currentFetchCount !== undefined &&
         currentFetchCount < 10 &&
@@ -41,9 +43,14 @@ const useTransactions = ({ initialFetchSize }: UseTransactionsParam) => {
     }
   }
 
+  const refetch = () => {
+    fetchNextTransactions(0, 0);
+  };
+
   return {
     transactions,
     fetchNextTransactions,
+    refetch,
   };
 };
 

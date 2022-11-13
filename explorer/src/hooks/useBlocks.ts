@@ -38,7 +38,9 @@ const useBlocks = ({ fetchSize }: UseBlocksParam) => {
       ),
     );
 
-    setBlocks(prev => [...prev, ...blockDetails]);
+    console.log(blockDetails);
+
+    setBlocks(prev => (isRefetching ? [...blockDetails] : [...prev, ...blockDetails]));
     return blockDetails;
   }
 
