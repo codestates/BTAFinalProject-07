@@ -23,23 +23,34 @@ function Transactions() {
         <table>
           <colgroup>
             <col width="2%" />
+            <col width="10%" />
             <col width="28%" />
-            <col width="30%" />
-            <col width="30%" />
+            <col width="25%" />
+            <col width="25%" />
             <col width="10%" />
             <col />
           </colgroup>
           <thead css={theadCss}>
             <th></th>
+            <th>STATUS</th>
             <th>TXN HASH</th>
             <th>FROM</th>
             <th>TO</th>
             <th>actions</th>
           </thead>
           <tbody>
-            {transactions.map(transaction => (
-              <tr key={transaction.hash} css={itemCss} onClick={() => handleTransactionItemClick(transaction.hash)}>
+            {transactions.map((transaction, idx) => (
+              <tr key={idx} css={itemCss} onClick={() => handleTransactionItemClick(transaction.hash)}>
                 <td></td>
+                <td>
+                  <img
+                    src={`/assets/icon-status-${
+                      transaction.status['SuccessValue'] !== undefined ? 'success' : 'failure'
+                    }.png`}
+                    width={25}
+                    height={25}
+                  />
+                </td>
                 <td>{makeEllipsis(transaction.hash, 27)}</td>
                 <td>{makeEllipsis(transaction.signer_id, 27)}</td>
                 <td>{makeEllipsis(transaction.receiver_id, 27)}</td>

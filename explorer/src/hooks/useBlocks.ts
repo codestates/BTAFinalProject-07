@@ -11,9 +11,13 @@ interface UseBlocksParam {
 const useBlocks = ({ fetchSize }: UseBlocksParam) => {
   const [blocks, setBlocks] = useState<BlockResult[]>([]);
   const [prevBlockHash, setPrevBlockHash] = useState('');
+  const [isFirstLoading, setIsFirstLoading] = useState(true);
 
   useEffect(() => {
-    fetchNextBlocks();
+    (async () => {
+      await fetchNextBlocks();
+      setIsFirstLoading(false);
+    })();
   }, []);
 
   async function fetchNextBlocks(isRefetching: boolean = false) {
@@ -52,6 +56,7 @@ const useBlocks = ({ fetchSize }: UseBlocksParam) => {
     blocks,
     fetchNextBlocks,
     refetch,
+    isFirstLoading,
   };
 };
 

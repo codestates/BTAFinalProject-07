@@ -12,8 +12,12 @@ import getConnectConfig from '@/utils/getConnectConfig';
 import getPastDateDiff from '@/utils/getDateDiff';
 
 function Home() {
-  const { blocks, refetch: refetchBlocks } = useBlocks({ fetchSize: 10 });
-  const { transactions, refetch: refetchTransactions } = useTransactions({ initialFetchSize: 10 });
+  const { blocks, refetch: refetchBlocks, isFirstLoading: isFirstBlocksLoading } = useBlocks({ fetchSize: 10 });
+  const {
+    transactions,
+    refetch: refetchTransactions,
+    isFirstLoading: isFirstTransactionsLoading,
+  } = useTransactions({ initialFetchSize: 10 });
   const [blocksPanelItems, setBlocksPanelItems] = useState<PanelItem[]>([]);
   const { inputValue, handleInputChange, handleSearchBtnClick } = useSearchInput();
   const navigate = useNavigate();
@@ -46,7 +50,7 @@ function Home() {
             description: transaction.receiver_id.slice(0, 12) + (transaction.receiver_id.length <= 12 ? '' : '...'),
           },
         },
-        badgeLabel: String(transaction.nonce).slice(0, 3), // TODO: 추후에 다른 값으로
+        badgeLabel: transaction.actions.length + ' actions',
         onItemClick: () => {
           navigate('/transactions/' + transaction.hash);
         },
@@ -118,6 +122,7 @@ function Home() {
           items={blocksPanelItems}
           buttonText={'View All Blocks'}
           onButtonClick={() => navigate('/blocks')}
+          isLoading={isFirstBlocksLoading}
         />
         <Panel
           title={'Transactions'}
@@ -125,6 +130,7 @@ function Home() {
           items={transactionsPanelItems}
           buttonText={'View All Transactions'}
           onButtonClick={() => navigate('/transactions')}
+          isLoading={isFirstTransactionsLoading}
         />
       </section>
     </div>

@@ -58,7 +58,7 @@ function Blocks() {
           </tbody>
         </table>
         <button css={moreBtnCss} onClick={handleMoreBtnClick}>
-          More Transactions
+          More Blocks
         </button>
       </DetailTable>
     </div>

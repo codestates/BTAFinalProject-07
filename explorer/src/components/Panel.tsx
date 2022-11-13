@@ -2,6 +2,7 @@
 /*eslint-disable*/
 import {css, Theme} from '@emotion/react';
 import {MouseEventHandler} from 'react';
+import {BallTriangle} from 'react-loader-spinner';
 
 export interface PanelItem {
   iconUrl: string;
@@ -28,10 +29,11 @@ interface PanelProps {
   titleIconUrl: string;
   items: PanelItem[];
   buttonText: string;
-  onButtonClick: MouseEventHandler<HTMLButtonElement>
+  onButtonClick: MouseEventHandler<HTMLButtonElement>;
+  isLoading?: boolean;
 }
 
-function Panel({title, titleIconUrl, items, buttonText, onButtonClick}: PanelProps) {
+function Panel({title, titleIconUrl, items, buttonText, isLoading = false, onButtonClick}: PanelProps) {
   return (
     <div css={panelCss}>
       <header>
@@ -40,42 +42,44 @@ function Panel({title, titleIconUrl, items, buttonText, onButtonClick}: PanelPro
       </header>
       <main>
         {
-          items.map(({ iconUrl, description, subDescription, badgeLabel, onItemClick }, idx) =>
-            <div key={idx} css={panelItemCss} onClick={onItemClick}>
-              <div className='panel-item-icon'>
-                <img width={40} height={40} src={iconUrl} />
-              </div>
-              <div className='panel-item-descriptions'>
-            <span>
-              {description.first}
-            </span>
-                <span>
-              {description.second ?? ''}
-            </span>
-              </div>
-              <div className='panel-item-sub-descriptions'>
-                <section>
-              <span>
-                {subDescription.first.name}
-              </span>
-                  <span>
-                {subDescription.second.name}
-              </span>
-                </section>
-                <section>
-              <span>
-                {subDescription.first.description}
-              </span>
-                  <span>
-                {subDescription.second.description}
-              </span>
-                </section>
-              </div>
-              <div className='panel-item-badge'>
-                {badgeLabel}
-              </div>
-            </div>
-          )
+          isLoading
+            ? <span css={loaderCss}><BallTriangle ariaLabel="loading-indicator" color={'#FF7915'} width={60} height={60}/></span>
+            : items.map(({ iconUrl, description, subDescription, badgeLabel, onItemClick }, idx) =>
+                <div key={idx} css={panelItemCss} onClick={onItemClick}>
+                  <div className='panel-item-icon'>
+                    <img width={40} height={40} src={iconUrl} />
+                  </div>
+                  <div className='panel-item-descriptions'>
+                    <span>
+                      {description.first}
+                    </span>
+                    <span>
+                      {description.second ?? ''}
+                    </span>
+                  </div>
+                  <div className='panel-item-sub-descriptions'>
+                    <section>
+                      <span>
+                        {subDescription.first.name}
+                      </span>
+                      <span>
+                        {subDescription.second.name}
+                      </span>
+                    </section>
+                    <section>
+                      <span>
+                        {subDescription.first.description}
+                      </span>
+                      <span>
+                        {subDescription.second.description}
+                      </span>
+                    </section>
+                  </div>
+                  <div className='panel-item-badge'>
+                    {badgeLabel}
+                  </div>
+                </div>
+            )
         }
       </main>
       <footer>
@@ -84,6 +88,13 @@ function Panel({title, titleIconUrl, items, buttonText, onButtonClick}: PanelPro
     </div>
   );
 };
+
+const loaderCss = css`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`
 
 const panelItemCss = (theme: Theme) => css`
   display: flex;
@@ -185,6 +196,7 @@ const panelCss = (theme: Theme) => css`
   }
   
   & > main {
+    position: relative;
     height: 540px;
     border-top: 1px solid ${theme.color.orange600};
     border-bottom: 1px solid ${theme.color.orange600};
