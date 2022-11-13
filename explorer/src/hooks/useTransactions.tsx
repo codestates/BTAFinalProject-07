@@ -13,10 +13,13 @@ const useTransactions = ({ initialFetchSize }: UseTransactionsParam) => {
   const { fetchNextBlocks } = useBlocks({ fetchSize: initialFetchSize });
 
   useEffect(() => {
-    fetchNextTransactions(0);
+    fetchNextTransactions(0, 0);
   }, []);
 
-  async function fetchNextTransactions(currentTransactionsLength: number = initialFetchSize) {
+  async function fetchNextTransactions(
+    currentTransactionsLength: number = initialFetchSize,
+    currentFetchCount?: number,
+  ) {
     try {
       const near = await connect(config);
       const blocks = await fetchNextBlocks();
@@ -26,8 +29,12 @@ const useTransactions = ({ initialFetchSize }: UseTransactionsParam) => {
       const newTransactions = chunkDetails.flatMap(chunk => chunk.transactions || []);
 
       setTransactions(prev => [...prev, ...newTransactions]);
-      if (currentTransactionsLength + newTransactions.length < initialFetchSize) {
-        fetchNextTransactions(currentTransactionsLength + newTransactions.length);
+      const needsToNextFetch =
+        currentFetchCount !== undefined &&
+        currentFetchCount < 10 &&
+        currentTransactionsLength + newTransactions.length < initialFetchSize;
+      if (needsToNextFetch) {
+        fetchNextTransactions(currentTransactionsLength + newTransactions.length, currentFetchCount + 1);
       }
     } catch (e) {
       console.error(e);
