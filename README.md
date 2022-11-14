@@ -12,7 +12,7 @@
 
 <br/>
 
-## NEAR Protocol
+## I. 니어 프로토콜(NEAR Protocol)
 ```
 이더리움, EOS와 같은 스마트 컨트랙트를 지원하는 퍼블릭 체인입니다. 
 TPoS (Thresholded Proof of Stake) 컨센서스를 활용하며 자체 확장성 솔루션인 Nightshade와 Doomslug 합의 메커니즘을 사용합니다.
@@ -58,7 +58,7 @@ TPoS (Thresholded Proof of Stake) 컨센서스를 활용하며 자체 확장성 
 
 <br/>
 
-## 시작하기
+## II. 시작하기
 <details>
 <summary>로컬 노드 생성 및 연동</summary>
 <div markdown="1"> 
@@ -302,7 +302,7 @@ npm run build
 
 <br/>
 
-## 예시 사진 자료
+## III. 예시 사진 자료
 
 - 연동된 두 개의 Local Validator Node들이 블록을 쌓는 모습
 <img width="1252" alt="image" src="https://user-images.githubusercontent.com/67793530/201623480-de719b02-fca9-4ecd-a9ce-8293cd8ce826.png">
@@ -317,8 +317,9 @@ npm run build
 - Wallet
 <img width="867" alt="image" src="https://user-images.githubusercontent.com/67793530/201623379-41146972-d70c-4a29-9758-de30bdff3e6a.png">
 
+<br/>
 
-## 예시 영상 자료
+## IV. 예시 영상 자료
 
 https://user-images.githubusercontent.com/67793530/201623661-17266f46-cc5f-47b7-a4e5-797e420c11d8.mov
 - 연결된 두 로컬 검증 노드가 쌓는 블록과, 한 노드에서 생성한 트랜잭션 데이터를 익스플로러에서 조회하는 모습
