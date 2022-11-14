@@ -40,7 +40,7 @@ const AccountInfo = (props) => {
             return false;
         }
 
-        setDeSecret(current.account.secretKey);
+        setDeSecret(String(current.account.secretKey).split(':')[1]);
         setShowInfo(true);
     }
 
