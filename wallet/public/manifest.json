@@ -7,9 +7,9 @@
   "permissions":[
     "storage"
   ],
-  "icons":[{
+  "icons":{
     "128":"engineer.png" 
-  }],
+  },
   "action": {
     "default_popup":"index.html"
   },
