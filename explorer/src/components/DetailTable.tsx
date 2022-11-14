@@ -57,6 +57,16 @@ const detailTableWrapCss = css`
         text-align: start;
         vertical-align: middle;
         color: ${theme.color.black600};
+
+        a {
+          text-decoration-line: none;
+          color: ${theme.color.black300};
+          font-weight: 700;
+
+          &:hover {
+            color: ${theme.color.black600};
+          }
+        }
       }
 
       th {

@@ -4,10 +4,11 @@ import DetailTable from '@/components/DetailTable';
 import useTransactions from '@/hooks/useTransactions';
 import { useNavigate } from 'react-router-dom';
 import makeEllipsis from '@/utils/makeEllipsis';
+import { Oval } from 'react-loader-spinner';
 
 function Transactions() {
   const navigate = useNavigate();
-  const { transactions, fetchNextTransactions } = useTransactions({ initialFetchSize: 20 });
+  const { transactions, fetchNextTransactions, isFetching } = useTransactions({ initialFetchSize: 20 });
 
   const handleMoreBtnClick = () => {
     fetchNextTransactions();
@@ -23,23 +24,34 @@ function Transactions() {
         <table>
           <colgroup>
             <col width="2%" />
+            <col width="10%" />
             <col width="28%" />
-            <col width="30%" />
-            <col width="30%" />
+            <col width="25%" />
+            <col width="25%" />
             <col width="10%" />
             <col />
           </colgroup>
           <thead css={theadCss}>
             <th></th>
+            <th>STATUS</th>
             <th>TXN HASH</th>
             <th>FROM</th>
             <th>TO</th>
             <th>actions</th>
           </thead>
           <tbody>
-            {transactions.map(transaction => (
-              <tr key={transaction.hash} css={itemCss} onClick={() => handleTransactionItemClick(transaction.hash)}>
+            {transactions.map((transaction, idx) => (
+              <tr key={idx} css={itemCss} onClick={() => handleTransactionItemClick(transaction.hash)}>
                 <td></td>
+                <td>
+                  <img
+                    src={`/assets/icon-status-${
+                      transaction.status['SuccessValue'] !== undefined ? 'success' : 'failure'
+                    }.png`}
+                    width={25}
+                    height={25}
+                  />
+                </td>
                 <td>{makeEllipsis(transaction.hash, 27)}</td>
                 <td>{makeEllipsis(transaction.signer_id, 27)}</td>
                 <td>{makeEllipsis(transaction.receiver_id, 27)}</td>
@@ -48,8 +60,8 @@ function Transactions() {
             ))}
           </tbody>
         </table>
-        <button css={moreBtnCss} onClick={handleMoreBtnClick}>
-          More Blocks
+        <button css={moreBtnCss} onClick={handleMoreBtnClick} disabled={isFetching}>
+          {isFetching ? <Oval width="30" height="30" color={'#fff'} secondaryColor={'#fff'} /> : 'More Blocks'}
         </button>
       </DetailTable>
     </div>
@@ -80,6 +92,9 @@ export const itemCss = (theme: Theme) => css`
 `;
 
 export const moreBtnCss = (theme: Theme) => css`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
   height: 40px;
   font-size: 18px;
@@ -88,8 +103,8 @@ export const moreBtnCss = (theme: Theme) => css`
   background-color: ${theme.color.orange600};
   margin-bottom: 20px;
 
-  &:hover {
-    background-color: ${theme.color.orange700};
+  &:hover:not(:disabled) {
+    background-color: ${theme.color.orange800};
   }
 `;
 

@@ -1,12 +1,10 @@
 import { ChangeEvent, useState } from 'react';
 import getBlockDetail from '@/utils/getBlockDetail';
-import { useNavigate } from 'react-router-dom';
 import getTransactionDetail from '@/utils/getTransactionDetail';
 import getAccountDetail from '@/utils/getAccountDetail';
 
 const useSearchInput = () => {
   const [inputValue, setInputValue] = useState('');
-  const navigate = useNavigate();
 
   const handleSearchBtnClick = async () => {
     if (!inputValue) {
@@ -15,21 +13,21 @@ const useSearchInput = () => {
     }
     try {
       await getTransactionDetail(inputValue);
-      navigate('/transactions/' + inputValue);
+      location.href = '/transactions/' + inputValue;
       return;
     } catch (e) {
       console.error(e);
     }
     try {
       await getBlockDetail(isNaN(Number(inputValue)) ? inputValue : Number(inputValue));
-      navigate('/blocks/' + inputValue);
+      location.href = '/blocks/' + inputValue;
       return;
     } catch (e) {
       console.error(e);
     }
     try {
       await getAccountDetail(inputValue);
-      navigate('/account?id=' + inputValue);
+      location.href = '/account?id=' + inputValue;
       return;
     } catch (e) {
       console.error(e);

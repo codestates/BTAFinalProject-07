@@ -6,7 +6,6 @@ import { AccessKeyList, AccountView } from 'near-api-js/lib/providers/provider';
 import getAccountDetail from '@/utils/getAccountDetail';
 import { css, Theme } from '@emotion/react';
 import DetailTable from '@/components/DetailTable';
-import { utils } from 'near-api-js';
 import getAccessKeys from '@/utils/getAccessKeys';
 
 function Account() {
@@ -40,40 +39,46 @@ function Account() {
     <>
       <div css={accountWrapCss}>
         <DetailTable title={'Account Information'} titleIconUrl={'/assets/icon-account.png'} isIconRounded={false}>
-          <tr>
-            <th>Account Id</th>
-            <td>{accountId}</td>
-          </tr>
-          {accountDetail && (
-            <>
-              <tr>
-                <th>Balance</th>
-                <td>{Number(utils.format.formatNearAmount(accountDetail.amount)).toFixed(2)} Near</td>
-              </tr>
-              <tr>
-                <th>Locked</th>
-                <td>{Number(accountDetail.locked) ? 'YES' : 'NO'} </td>
-              </tr>
-              <tr>
-                <th>Storage Used</th>
-                <td>{(Number(accountDetail.storage_usage) / 1000).toFixed(2)}KB</td>
-              </tr>
-            </>
-          )}
-          {accessKeys &&
-            accessKeys.keys.map(({ public_key, access_key }, idx) => (
-              <tr key={public_key} style={idx ? { borderTop: 'none' } : undefined}>
-                <th>{idx === 0 ? 'Access Keys' : ''}</th>
-                <td css={accessKeyTdCss}>
-                  <p>
-                    <span className="permission-label">
-                      {access_key.permission === 'FullAccess' ? 'Full' : 'Limited'}
-                    </span>
-                    <span>{public_key}</span>
-                  </p>
-                </td>
-              </tr>
-            ))}
+          <colgroup>
+            <col width="300px" />
+            <col />
+          </colgroup>
+          <tbody>
+            <tr>
+              <th>Account Id</th>
+              <td>{accountId}</td>
+            </tr>
+            {accountDetail && (
+              <>
+                <tr>
+                  <th>Balance</th>
+                  <td>{(Number(accountDetail.amount) / 10 ** 24).toFixed(2)} Near</td>
+                </tr>
+                <tr>
+                  <th>Locked</th>
+                  <td>{Number(accountDetail.locked) ? 'YES' : 'NO'} </td>
+                </tr>
+                <tr>
+                  <th>Storage Used</th>
+                  <td>{(Number(accountDetail.storage_usage) / 1000).toFixed(2)}KB</td>
+                </tr>
+              </>
+            )}
+            {accessKeys &&
+              accessKeys.keys.map(({ public_key, access_key }, idx) => (
+                <tr key={public_key} style={idx ? { borderTop: 'none' } : undefined}>
+                  <th>{idx === 0 ? 'Access Keys' : ''}</th>
+                  <td css={accessKeyTdCss}>
+                    <p>
+                      <span className="permission-label">
+                        {access_key.permission === 'FullAccess' ? 'Full' : 'Limited'}
+                      </span>
+                      <span>{public_key}</span>
+                    </p>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
         </DetailTable>
       </div>
     </>

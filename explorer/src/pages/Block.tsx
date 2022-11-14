@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { BlockResult, ChunkResult } from 'near-api-js/lib/providers/provider';
 import DetailTable from '@/components/DetailTable';
@@ -67,7 +67,9 @@ function Block() {
               </tr>
               <tr>
                 <th>Author</th>
-                <td>{block.author}</td>
+                <td>
+                  <Link to={'/account?id=' + block.author}>{block.author}</Link>
+                </td>
               </tr>
               <tr>
                 <th>Parent Hash</th>

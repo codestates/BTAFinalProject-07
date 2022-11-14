@@ -11,12 +11,18 @@ interface UseBlocksParam {
 const useBlocks = ({ fetchSize }: UseBlocksParam) => {
   const [blocks, setBlocks] = useState<BlockResult[]>([]);
   const [prevBlockHash, setPrevBlockHash] = useState('');
+  const [isFirstLoading, setIsFirstLoading] = useState(true);
+  const [isFetching, setIsFetching] = useState(true);
 
   useEffect(() => {
-    fetchNextBlocks();
+    (async () => {
+      await fetchNextBlocks();
+      setIsFirstLoading(false);
+    })();
   }, []);
 
   async function fetchNextBlocks(isRefetching: boolean = false) {
+    setIsFetching(true);
     const near = await connect(getConnectConfig());
     const lastBlock = await getBlockDetail(isRefetching ? undefined : prevBlockHash || undefined);
     const blockHashArr = [lastBlock.header.hash];
@@ -37,8 +43,8 @@ const useBlocks = ({ fetchSize }: UseBlocksParam) => {
         }),
       ),
     );
-
-    setBlocks(prev => [...prev, ...blockDetails]);
+    setBlocks(prev => (isRefetching ? [...blockDetails] : [...prev, ...blockDetails]));
+    setIsFetching(false);
     return blockDetails;
   }
 
@@ -50,6 +56,8 @@ const useBlocks = ({ fetchSize }: UseBlocksParam) => {
     blocks,
     fetchNextBlocks,
     refetch,
+    isFirstLoading,
+    isFetching,
   };
 };
 

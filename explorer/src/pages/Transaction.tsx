@@ -1,8 +1,8 @@
 /** @jsxImportSource @emotion/react */
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { FinalExecutionOutcome } from 'near-api-js/lib/providers';
-import { BlockResult, Transaction as TransactionType } from 'near-api-js/lib/providers/provider';
+import { BlockResult, FinalExecutionStatus, Transaction as TransactionType } from 'near-api-js/lib/providers/provider';
 import getTransactionDetail from '@/utils/getTransactionDetail';
 import DetailTable from '@/components/DetailTable';
 import getBlockDetail from '@/utils/getBlockDetail';
@@ -56,6 +56,20 @@ function Transaction() {
                   <th>Txn Hash</th>
                   <td>{(transaction.transaction as TransactionType).hash}</td>
                 </tr>
+                <tr style={{ borderTop: 'none' }}>
+                  <th>Status</th>
+                  <td>
+                    <img
+                      src={`/assets/icon-status-${
+                        (transaction.status as FinalExecutionStatus)['SuccessValue'] !== undefined
+                          ? 'success'
+                          : 'failure'
+                      }.png`}
+                      width={25}
+                      height={25}
+                    />
+                  </td>
+                </tr>
                 {block && (
                   <>
                     <tr style={{ borderTop: 'none' }}>
@@ -78,11 +92,19 @@ function Transaction() {
                 ))}
                 <tr>
                   <th>From</th>
-                  <td>{(transaction.transaction as TransactionType).signer_id}</td>
+                  <td>
+                    <Link to={'/account?id=' + (transaction.transaction as TransactionType).signer_id}>
+                      {(transaction.transaction as TransactionType).signer_id}
+                    </Link>
+                  </td>
                 </tr>
                 <tr style={{ borderTop: 'none' }}>
                   <th>To</th>
-                  <td>{(transaction.transaction as TransactionType).receiver_id}</td>
+                  <td>
+                    <Link to={'/account?id=' + (transaction.transaction as TransactionType).receiver_id}>
+                      {(transaction.transaction as TransactionType).receiver_id}
+                    </Link>
+                  </td>
                 </tr>
               </>
             </tbody>
