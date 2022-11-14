@@ -61,7 +61,7 @@ function Transactions() {
           </tbody>
         </table>
         <button css={moreBtnCss} onClick={handleMoreBtnClick} disabled={isFetching}>
-          {isFetching ? <Oval width="30" height="30" color={'#fff'} secondaryColor={'#fff'} /> : 'More Blocks'}
+          {isFetching ? <Oval width="30" height="30" color={'#fff'} secondaryColor={'#fff'} /> : 'More Transactions'}
         </button>
       </DetailTable>
     </div>
